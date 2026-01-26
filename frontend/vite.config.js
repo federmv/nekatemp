@@ -7,7 +7,7 @@ export default defineConfig({
         react(),
         VitePWA({
             registerType: 'autoUpdate',
-            includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+            includeAssets: [],
             manifest: {
                 name: 'Neka Dashboard',
                 short_name: 'NekaOne',
@@ -16,6 +16,8 @@ export default defineConfig({
                 background_color: '#0f172a',
                 display: 'standalone',
                 orientation: 'portrait',
+                scope: '/',
+                start_url: '/',
                 icons: [
                     {
                         src: 'pwa-192x192.png',
@@ -26,6 +28,12 @@ export default defineConfig({
                         src: 'pwa-512x512.png',
                         sizes: '512x512',
                         type: 'image/png'
+                    },
+                    {
+                        src: 'pwa-512x512.png',
+                        sizes: '512x512',
+                        type: 'image/png',
+                        purpose: 'any maskable'
                     }
                 ]
             }

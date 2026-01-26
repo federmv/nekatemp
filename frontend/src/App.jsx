@@ -46,7 +46,7 @@ function App() {
         <div className="dashboard">
             <header className="flex justify-between items-center mb-8">
                 <div>
-                    <h1>Oracle IoT Dashboard</h1>
+                    <h1>Neka Dashboard</h1>
                     <p style={{ color: '#94a3b8' }}>Monitor de Temperatura</p>
                 </div>
             </header>
@@ -64,7 +64,7 @@ function App() {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                     <div className="stat-label">Última actualización</div>
-                    <div style={{ color: '#94a3b8' }}>{new Date().toLocaleTimeString()}</div>
+                    <div style={{ color: '#94a3b8' }}>{new Date().toLocaleTimeString('es-CO', { timeZone: 'America/Bogota' })}</div>
                 </div>
             </div>
 
@@ -103,13 +103,13 @@ function App() {
                         />
                         <YAxis
                             stroke="#64748b"
-                            domain={['auto', 'auto']}
+                            domain={[20, 60]}
                             tick={{ fontSize: 12 }}
                         />
                         <Tooltip
                             contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px' }}
                             itemStyle={{ color: '#38bdf8' }}
-                            labelFormatter={(label) => new Date(label).toLocaleString()}
+                            labelFormatter={(label) => new Date(label).toLocaleString('es-CO', { timeZone: 'America/Bogota' })}
                             formatter={(value) => [`${value}°C`, 'Temperatura']}
                         />
                         <Area

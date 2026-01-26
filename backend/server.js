@@ -35,7 +35,7 @@ let db;
 // Endpoint para que el ESP32 envíe datos
 app.post('/api/data', async (req, res) => {
     const { temperature, humidity } = req.body;
-    
+
     if (temperature === undefined) {
         return res.status(400).json({ error: 'Temperatura requerida' });
     }
@@ -60,6 +60,14 @@ app.get('/api/data', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener datos' });
     }
+});
+
+// Servir los archivos estáticos del Frontend (React build)
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Cualquier otra ruta devuelve el index.html (para que React Router funcione, si se usara)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {

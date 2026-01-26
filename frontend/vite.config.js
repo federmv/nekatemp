@@ -10,14 +10,14 @@ export default defineConfig({
             includeAssets: [],
             manifest: {
                 name: 'Neka Dashboard',
-                short_name: 'NekaOne',
-                description: 'Monitor de Temperatura IoT ESP32',
+                short_name: 'Neka',
+                description: 'Monitor IoT',
                 theme_color: '#0f172a',
                 background_color: '#0f172a',
                 display: 'standalone',
-                orientation: 'portrait',
                 scope: '/',
                 start_url: '/',
+                orientation: 'portrait',
                 icons: [
                     {
                         src: 'pwa-192x192.png',
@@ -28,14 +28,13 @@ export default defineConfig({
                         src: 'pwa-512x512.png',
                         sizes: '512x512',
                         type: 'image/png'
-                    },
-                    {
-                        src: 'pwa-512x512.png',
-                        sizes: '512x512',
-                        type: 'image/png',
-                        purpose: 'any maskable'
                     }
                 ]
+            },
+            workbox: {
+                // Forzar que el Service Worker controle la página inmediatamente
+                skipWaiting: true,
+                clientsClaim: true
             }
         })
     ],

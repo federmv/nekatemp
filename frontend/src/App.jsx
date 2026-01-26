@@ -96,41 +96,49 @@ function App() {
 
             <div className="glass-card chart-container" style={{ height: '500px' }}>
                 <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={data}>
+                    <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.3} />
+                                <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.1} />
                                 <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={true} />
                         <XAxis
                             dataKey="timestamp"
                             tickFormatter={formatXAxis}
-                            stroke="#64748b"
-                            tick={{ fontSize: 12 }}
-                            minTickGap={30}
+                            stroke="#94a3b8"
+                            tick={{ fontSize: 11 }}
+                            minTickGap={50}
+                            axisLine={false}
+                            tickLine={false}
                         />
                         <YAxis
-                            stroke="#64748b"
+                            stroke="#94a3b8"
                             domain={[20, 60]}
-                            tick={{ fontSize: 12 }}
+                            tick={{ fontSize: 11 }}
+                            axisLine={false}
+                            tickLine={false}
+                            width={30}
                         />
                         <Tooltip
-                            contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px' }}
-                            itemStyle={{ color: '#38bdf8' }}
+                            contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', border: 'none', borderRadius: '4px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                            itemStyle={{ color: '#38bdf8', fontWeight: 'bold' }}
+                            labelStyle={{ color: '#94a3b8', marginBottom: '0.25rem' }}
                             labelFormatter={(label) => parseTimestamp(label).toLocaleString('es-CO', { timeZone: 'America/Bogota' })}
-                            formatter={(value) => [`${value}°C`, 'Temperatura']}
+                            formatter={(value) => [`${value}°C`, '']}
+                            cursor={{ stroke: '#64748b', strokeWidth: 1, strokeDasharray: '4 4' }}
                         />
                         <Area
                             type="monotone"
                             dataKey="temperature"
                             stroke="#38bdf8"
-                            strokeWidth={3}
+                            strokeWidth={2}
                             fillOpacity={1}
                             fill="url(#colorTemp)"
-                            animationDuration={500}
-                            isAnimationActive={range === 'live'} // Solo animar en vivo para rendimiento
+                            activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
+                            animationDuration={300}
+                            isAnimationActive={range === 'live'}
                         />
                     </AreaChart>
                 </ResponsiveContainer>

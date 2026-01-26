@@ -3,7 +3,7 @@ import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Thermometer, Droplets, Activity } from 'lucide-react';
 
-const API_URL = 'http://localhost:3001/api/data'; // Cambiar por IP de Oracle Cloud después
+const API_URL = '/api/data'; // Ruta relativa automática
 
 function App() {
     const [data, setData] = useState([]);

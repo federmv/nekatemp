@@ -66,7 +66,7 @@ app.get('/api/data', async (req, res) => {
 app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Cualquier otra ruta devuelve el index.html (para que React Router funcione, si se usara)
-app.get('*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
 });
 

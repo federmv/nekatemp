@@ -99,22 +99,22 @@ app.get('/api/data', async (req, res) => {
         let query = 'SELECT * FROM measurements';
         let params = [];
 
-        // Filtros de tiempo basados en SQLite
+        // Filtros de tiempo basados en SQLite (Comparación UTC estricta)
         if (range === '1h') {
-            query += " WHERE timestamp >= datetime('now', '-1 hour', 'localtime')";
+            query += " WHERE timestamp >= datetime('now', '-1 hour')";
         } else if (range === '12h') {
-            query += " WHERE timestamp >= datetime('now', '-12 hours', 'localtime')";
+            query += " WHERE timestamp >= datetime('now', '-12 hours')";
         } else if (range === '24h') {
-            query += " WHERE timestamp >= datetime('now', '-24 hours', 'localtime')";
+            query += " WHERE timestamp >= datetime('now', '-24 hours')";
         } else if (range === '7d') {
-            query += " WHERE timestamp >= datetime('now', '-7 days', 'localtime')";
+            query += " WHERE timestamp >= datetime('now', '-7 days')";
         } else if (range === '15d') {
-            query += " WHERE timestamp >= datetime('now', '-15 days', 'localtime')";
+            query += " WHERE timestamp >= datetime('now', '-15 days')";
         } else {
             // Por defecto (Live): Últimas 50 mediciones
             query += ' ORDER BY timestamp DESC LIMIT 50';
             const data = await db.all(query);
-            return res.json(data); // Ya están ordenados DESC, el front los invierte
+            return res.json(data);
         }
 
         query += ' ORDER BY timestamp ASC';

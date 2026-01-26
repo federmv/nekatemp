@@ -34,9 +34,17 @@ function App() {
 
     const latest = data.length > 0 ? data[data.length - 1] : { temperature: 0 };
 
+    // Función auxiliar para parsear fechas UTC de SQLite correctamente
+    const parseTimestamp = (timestamp) => {
+        if (!timestamp) return new Date();
+        // SQLite devuelve "YYYY-MM-DD HH:MM:SS" (UTC).
+        // Reemplazamos espacio por T y agregamos Z para que JS sepa que es UTC.
+        return new Date(timestamp.replace(' ', 'T') + 'Z');
+    };
+
     const formatXAxis = (tickItem) => {
         if (!tickItem) return '';
-        const date = new Date(tickItem);
+        const date = parseTimestamp(tickItem);
         const coOptions = { timeZone: 'America/Bogota' };
 
         if (range === 'live' || range === '1h') return date.toLocaleTimeString('es-CO', { ...coOptions, hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -77,8 +85,8 @@ function App() {
                         key={r}
                         onClick={() => setRange(r)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${range === r
-                            ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25'
-                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                                ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25'
+                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                             }`}
                     >
                         {r === 'live' ? 'En Vivo' : r.toUpperCase()}
@@ -111,7 +119,7 @@ function App() {
                         <Tooltip
                             contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px' }}
                             itemStyle={{ color: '#38bdf8' }}
-                            labelFormatter={(label) => new Date(label).toLocaleString('es-CO', { timeZone: 'America/Bogota' })}
+                            labelFormatter={(label) => parseTimestamp(label).toLocaleString('es-CO', { timeZone: 'America/Bogota' })}
                             formatter={(value) => [`${value}°C`, 'Temperatura']}
                         />
                         <Area

@@ -69,7 +69,7 @@ function App() {
                         TEMPERATURA ACTUAL
                     </div>
                     <div className="stat-value" style={{ fontSize: '4rem', color: '#38bdf8' }}>
-                        {latest.temperature?.toFixed(1)}°C
+                        {latest.temperature?.toFixed(2)}°C
                     </div>
                 </div>
                 <div className="update-info" style={{ textAlign: 'right' }}>
@@ -85,8 +85,8 @@ function App() {
                         key={r}
                         onClick={() => setRange(r)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${range === r
-                                ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25'
-                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                            ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25'
+                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                             }`}
                     >
                         {r === 'live' ? 'En Vivo' : r.toUpperCase()}

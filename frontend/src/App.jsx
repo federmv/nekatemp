@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-import { Thermometer, Droplets, Activity } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Thermometer } from 'lucide-react';
 
-const API_URL = '/api/data'; // Ruta relativa automática
+const API_URL = '/api/data';
 
 function App() {
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [range, setRange] = useState('live'); // 'live', '1h', '12h', '24h', '7d', '15d'
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(API_URL);
-            // Revertir para que el gráfico sea cronológico (izquierda a derecha)
-            setData(response.data.reverse());
-            setLoading(false);
+            const response = await axios.get(API_URL, {
+                params: { range: range === 'live' ? undefined : range }
+            });
+            // Si es 'live' (por defecto), vienen DESC, así que invertimos. 
+            // Si es un rango específico, el server ya los manda ASC.
+            const formattedData = range === 'live' ? response.data.reverse() : response.data;
+
+            setData(formattedData);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -22,45 +26,66 @@ function App() {
 
     useEffect(() => {
         fetchData();
-        const interval = setInterval(fetchData, 5000); // Actualizar cada 5s
+        // Actualizar más rápido si es Live (cada 2s), más lento si es historial (cada 1 min)
+        const intervalTime = range === 'live' ? 2000 : 60000;
+        const interval = setInterval(fetchData, intervalTime);
         return () => clearInterval(interval);
-    }, []);
+    }, [range]); // Recargar cuando cambie el rango
 
-    const latest = data.length > 0 ? data[data.length - 1] : { temperature: 0, humidity: 0 };
+    const latest = data.length > 0 ? data[data.length - 1] : { temperature: 0 };
+
+    const formatXAxis = (tickItem) => {
+        if (!tickItem) return '';
+        const date = new Date(tickItem);
+        if (range === 'live' || range === '1h') return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        if (range === '12h' || range === '24h') return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit' });
+    };
 
     return (
         <div className="dashboard">
-            <header>
-                <h1>Oracle IoT Dashboard</h1>
-                <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>Monitoreo de ESP32 en tiempo real</p>
+            <header className="flex justify-between items-center mb-8">
+                <div>
+                    <h1>Oracle IoT Dashboard</h1>
+                    <p style={{ color: '#94a3b8' }}>Monitor de Temperatura</p>
+                </div>
             </header>
 
-            <div className="stat-grid">
-                <div className="stat-card glass-card">
-                    <div className="stat-label">
-                        <Thermometer size={16} className="inline mr-2" /> Temperatura Actual
+            {/* Widget Principal de Temperatura */}
+            <div className="stat-card glass-card mb-8" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                    <div className="stat-label flex items-center gap-2">
+                        <Thermometer size={20} className="text-sky-400" />
+                        TEMPERATURA ACTUAL
                     </div>
-                    <div className="stat-value">{latest.temperature}°C</div>
+                    <div className="stat-value" style={{ fontSize: '4rem', color: '#38bdf8' }}>
+                        {latest.temperature?.toFixed(1)}°C
+                    </div>
                 </div>
-
-                <div className="stat-card glass-card" style={{ borderLeftColor: '#818cf8' }}>
-                    <div className="stat-label">
-                        <Droplets size={16} className="inline mr-2" /> Humedad
-                    </div>
-                    <div className="stat-value">{latest.humidity}%</div>
-                </div>
-
-                <div className="stat-card glass-card" style={{ borderLeftColor: '#10b981' }}>
-                    <div className="stat-label">
-                        <Activity size={16} className="inline mr-2" /> Estado
-                    </div>
-                    <div className="stat-value">Activo</div>
+                <div style={{ textAlign: 'right' }}>
+                    <div className="stat-label">Última actualización</div>
+                    <div style={{ color: '#94a3b8' }}>{new Date().toLocaleTimeString()}</div>
                 </div>
             </div>
 
-            <div className="glass-card chart-container">
-                <h3 style={{ marginTop: 0, marginBottom: '2rem' }}>Histórico de Temperatura</h3>
-                <ResponsiveContainer width="100%" height="80%">
+            {/* Controles de Rango */}
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+                {['live', '1h', '12h', '24h', '7d', '15d'].map((r) => (
+                    <button
+                        key={r}
+                        onClick={() => setRange(r)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${range === r
+                                ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25'
+                                : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                            }`}
+                    >
+                        {r === 'live' ? 'En Vivo' : r.toUpperCase()}
+                    </button>
+                ))}
+            </div>
+
+            <div className="glass-card chart-container" style={{ height: '500px' }}>
+                <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={data}>
                         <defs>
                             <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
@@ -68,24 +93,34 @@ function App() {
                                 <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#2d3748" vertical={false} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                         <XAxis
                             dataKey="timestamp"
-                            hide={true}
+                            tickFormatter={formatXAxis}
+                            stroke="#64748b"
+                            tick={{ fontSize: 12 }}
+                            minTickGap={30}
                         />
-                        <YAxis stroke="#94a3b8" />
+                        <YAxis
+                            stroke="#64748b"
+                            domain={['auto', 'auto']}
+                            tick={{ fontSize: 12 }}
+                        />
                         <Tooltip
-                            contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}
+                            contentStyle={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', borderRadius: '8px' }}
                             itemStyle={{ color: '#38bdf8' }}
+                            labelFormatter={(label) => new Date(label).toLocaleString()}
+                            formatter={(value) => [`${value}°C`, 'Temperatura']}
                         />
                         <Area
                             type="monotone"
                             dataKey="temperature"
                             stroke="#38bdf8"
+                            strokeWidth={3}
                             fillOpacity={1}
                             fill="url(#colorTemp)"
-                            strokeWidth={3}
-                            animationDuration={1000}
+                            animationDuration={500}
+                            isAnimationActive={range === 'live'} // Solo animar en vivo para rendimiento
                         />
                     </AreaChart>
                 </ResponsiveContainer>

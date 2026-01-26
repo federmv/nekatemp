@@ -92,12 +92,40 @@ app.post('/api/data', async (req, res) => {
     }
 });
 
-// Endpoint para que la web consulte los datos
+// Endpoint para que la web consulte los datos con filtros de tiempo
 app.get('/api/data', async (req, res) => {
     try {
-        const data = await db.all('SELECT * FROM measurements ORDER BY timestamp DESC LIMIT 50');
+        const { range } = req.query;
+        let query = 'SELECT * FROM measurements';
+        let params = [];
+
+        // Filtros de tiempo basados en SQLite
+        if (range === '1h') {
+            query += " WHERE timestamp >= datetime('now', '-1 hour', 'localtime')";
+        } else if (range === '12h') {
+            query += " WHERE timestamp >= datetime('now', '-12 hours', 'localtime')";
+        } else if (range === '24h') {
+            query += " WHERE timestamp >= datetime('now', '-24 hours', 'localtime')";
+        } else if (range === '7d') {
+            query += " WHERE timestamp >= datetime('now', '-7 days', 'localtime')";
+        } else if (range === '15d') {
+            query += " WHERE timestamp >= datetime('now', '-15 days', 'localtime')";
+        } else {
+            // Por defecto (Live): Últimas 50 mediciones
+            query += ' ORDER BY timestamp DESC LIMIT 50';
+            const data = await db.all(query);
+            return res.json(data); // Ya están ordenados DESC, el front los invierte
+        }
+
+        query += ' ORDER BY timestamp ASC';
+
+        // Para rangos largos, limitamos para no saturar (opcional, SQLite es rápido)
+        // query += ' LIMIT 5000'; 
+
+        const data = await db.all(query, params);
         res.json(data);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Error al obtener datos' });
     }
 });

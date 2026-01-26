@@ -54,7 +54,7 @@ function App() {
             </header>
 
             {/* Widget Principal de Temperatura */}
-            <div className="stat-card glass-card mb-8" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div className="stat-card glass-card mb-8 main-stat-widget" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
                     <div className="stat-label flex items-center gap-2">
                         <Thermometer size={20} className="text-sky-400" />
@@ -64,14 +64,14 @@ function App() {
                         {latest.temperature?.toFixed(1)}°C
                     </div>
                 </div>
-                <div style={{ textAlign: 'right' }}>
+                <div className="update-info" style={{ textAlign: 'right' }}>
                     <div className="stat-label">Última actualización</div>
                     <div style={{ color: '#94a3b8' }}>{new Date().toLocaleTimeString('es-CO', { timeZone: 'America/Bogota' })}</div>
                 </div>
             </div>
 
             {/* Controles de Rango */}
-            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-2 range-selector">
                 {['live', '1h', '12h', '24h', '7d', '15d'].map((r) => (
                     <button
                         key={r}

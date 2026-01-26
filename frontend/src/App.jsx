@@ -78,70 +78,89 @@ function App() {
                 </div>
             </div>
 
-            {/* Controles de Rango */}
-            <div className="flex gap-2 mb-4 overflow-x-auto pb-2 range-selector">
-                {['live', '1h', '12h', '24h', '7d', '15d'].map((r) => (
-                    <button
-                        key={r}
-                        onClick={() => setRange(r)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${range === r
-                            ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25'
-                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-                            }`}
-                    >
-                        {r === 'live' ? 'En Vivo' : r.toUpperCase()}
-                    </button>
-                ))}
-            </div>
+            <div className="glass-card chart-container" style={{ height: '540px', padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
+                <div className="chart-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: '#e2e8f0' }}>Historial</h3>
 
-            <div className="glass-card chart-container" style={{ height: '500px' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                        <defs>
-                            <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.1} />
-                                <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
-                            </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={true} />
-                        <XAxis
-                            dataKey="timestamp"
-                            tickFormatter={formatXAxis}
-                            stroke="#94a3b8"
-                            tick={{ fontSize: 11 }}
-                            minTickGap={50}
-                            axisLine={false}
-                            tickLine={false}
-                        />
-                        <YAxis
-                            stroke="#94a3b8"
-                            domain={[20, 60]}
-                            tick={{ fontSize: 11 }}
-                            axisLine={false}
-                            tickLine={false}
-                            width={30}
-                        />
-                        <Tooltip
-                            contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', border: 'none', borderRadius: '4px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
-                            itemStyle={{ color: '#38bdf8', fontWeight: 'bold' }}
-                            labelStyle={{ color: '#94a3b8', marginBottom: '0.25rem' }}
-                            labelFormatter={(label) => parseTimestamp(label).toLocaleString('es-CO', { timeZone: 'America/Bogota' })}
-                            formatter={(value) => [`${value}°C`, '']}
-                            cursor={{ stroke: '#64748b', strokeWidth: 1, strokeDasharray: '4 4' }}
-                        />
-                        <Area
-                            type="monotone"
-                            dataKey="temperature"
-                            stroke="#38bdf8"
-                            strokeWidth={2}
-                            fillOpacity={1}
-                            fill="url(#colorTemp)"
-                            activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
-                            animationDuration={300}
-                            isAnimationActive={range === 'live'}
-                        />
-                    </AreaChart>
-                </ResponsiveContainer>
+                    {/* Selector de Rango Estilo Segmentado */}
+                    <div className="range-segment" style={{ display: 'flex', background: '#0f172a', padding: '4px', borderRadius: '8px', gap: '2px' }}>
+                        {[
+                            { k: 'live', l: 'LIVE' },
+                            { k: '1h', l: '1H' },
+                            { k: '24h', l: '1D' },
+                            { k: '7d', l: '7D' },
+                            { k: '15d', l: '15D' }
+                        ].map((item) => (
+                            <button
+                                key={item.k}
+                                onClick={() => setRange(item.k)}
+                                style={{
+                                    border: 'none',
+                                    background: range === item.k ? '#38bdf8' : 'transparent',
+                                    color: range === item.k ? '#0f172a' : '#64748b',
+                                    padding: '4px 12px',
+                                    borderRadius: '6px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                {item.l}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div style={{ flex: 1, minHeight: 0 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={data} margin={{ top: 5, right: 0, left: -20, bottom: 0 }}>
+                            <defs>
+                                <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.1} />
+                                    <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
+                                </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={true} />
+                            <XAxis
+                                dataKey="timestamp"
+                                tickFormatter={formatXAxis}
+                                stroke="#94a3b8"
+                                tick={{ fontSize: 11 }}
+                                minTickGap={50}
+                                axisLine={false}
+                                tickLine={false}
+                            />
+                            <YAxis
+                                stroke="#94a3b8"
+                                domain={[20, 60]}
+                                tick={{ fontSize: 11 }}
+                                axisLine={false}
+                                tickLine={false}
+                                width={30}
+                            />
+                            <Tooltip
+                                contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', border: 'none', borderRadius: '4px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                                itemStyle={{ color: '#38bdf8', fontWeight: 'bold' }}
+                                labelStyle={{ color: '#94a3b8', marginBottom: '0.25rem' }}
+                                labelFormatter={(label) => parseTimestamp(label).toLocaleString('es-CO', { timeZone: 'America/Bogota' })}
+                                formatter={(value) => [`${value}°C`, '']}
+                                cursor={{ stroke: '#64748b', strokeWidth: 1, strokeDasharray: '4 4' }}
+                            />
+                            <Area
+                                type="monotone"
+                                dataKey="temperature"
+                                stroke="#38bdf8"
+                                strokeWidth={2}
+                                fillOpacity={1}
+                                fill="url(#colorTemp)"
+                                activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
+                                animationDuration={300}
+                                isAnimationActive={range === 'live'}
+                            />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                </div>
             </div>
         </div>
     );

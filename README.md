@@ -61,3 +61,16 @@ El ESP32 se conecta por MQTT al puerto **1883**.
 Los datos se guardan en `backend/database.sqlite`.
 - Tabla: `measurements` (id, temperature, humidity, timestamp)
 - Horario: UTC (La web convierte a hora local Colombia automáticamente).
+
+## 🔄 Auto-arranque al reiniciar (Importante)
+Para que el servidor se prenda solo si reinicias la máquina:
+
+1. Ejecuta este comando:
+   ```bash
+   pm2 startup
+   ```
+2. **Copia y pega** el comando largo que te dará como respuesta (empieza con `sudo env PATH...`).
+3. Guarda la configuración:
+   ```bash
+   pm2 save
+   ```

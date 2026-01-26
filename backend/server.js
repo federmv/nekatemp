@@ -4,9 +4,16 @@ const bodyParser = require('body-parser');
 const { open } = require('sqlite');
 const sqlite3 = require('sqlite3');
 const path = require('path');
+const Aedes = require('aedes');
+const { createServer } = require('net');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const MQTT_PORT = 1883; // Puerto estándar MQTT
+
+// Configuración del Broker MQTT
+const aedes = Aedes();
+const mqttServer = createServer(aedes.handle);
 
 // Middleware
 app.use(cors());
@@ -30,9 +37,42 @@ let db;
         )
     `);
     console.log('Base de datos SQLite lista.');
+
+    // Iniciar Broker MQTT
+    mqttServer.listen(MQTT_PORT, function () {
+        console.log('Broker MQTT escuchando en el puerto', MQTT_PORT);
+    });
+
+    // Escuchar mensajes publicados
+    aedes.on('publish', async function (packet, client) {
+        if (packet.topic === 'casa/esp32/datos') {
+            const msg = packet.payload.toString();
+            console.log(`[MQTT] Dato recibido: ${msg}`);
+
+            // El ESP32 envía solo el número (ej: "25.5")
+            const temperature = parseFloat(msg);
+
+            if (!isNaN(temperature)) {
+                try {
+                    await db.run(
+                        'INSERT INTO measurements (temperature, humidity) VALUES (?, ?)',
+                        [temperature, 0] // Asumimos humedad 0 ya que el código actual solo envía temp
+                    );
+                    console.log(`[DB] Temperatura guardada: ${temperature}°C`);
+                } catch (error) {
+                    console.error('[DB] Error al guardar:', error.message);
+                }
+            }
+        }
+    });
+
+    // Eventos de conexión
+    aedes.on('client', function (client) {
+        console.log(`[MQTT] Nuevo cliente conectado: ${client ? client.id : client}`);
+    });
 })();
 
-// Endpoint para que el ESP32 envíe datos
+// Endpoint para que el ESP32 envíe datos (Soporte Legacy HTTP)
 app.post('/api/data', async (req, res) => {
     const { temperature, humidity } = req.body;
 

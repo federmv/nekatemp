@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aedes": "^0.51.3",
     "axios": "^1.13.3",
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
@@ -18,5 +19,8 @@
     "recharts": "^3.7.0",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }

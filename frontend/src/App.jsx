@@ -123,7 +123,11 @@ function App() {
                                 />
                                 <YAxis
                                     stroke="#475569"
-                                    domain={[20, 60]}
+                                    domain={
+                                        range === 'live' && latest.temperature
+                                            ? [latest.temperature - 5, latest.temperature + 5]
+                                            : [20, 50]
+                                    }
                                     tick={{ fontSize: 11, fill: '#8b9bb4' }}
                                     axisLine={false}
                                     tickLine={false}

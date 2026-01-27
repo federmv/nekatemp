@@ -123,7 +123,7 @@ function App() {
                                 />
                                 <YAxis
                                     stroke="#475569"
-                                    domain={['auto', 'auto']}
+                                    domain={[20, 60]}
                                     tick={{ fontSize: 11, fill: '#8b9bb4' }}
                                     axisLine={false}
                                     tickLine={false}

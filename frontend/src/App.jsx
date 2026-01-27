@@ -125,8 +125,8 @@ function App() {
                                     stroke="#475569"
                                     domain={
                                         range === 'live' && latest.temperature
-                                            ? [latest.temperature - 5, latest.temperature + 5]
-                                            : [20, 50]
+                                            ? [latest.temperature - 2, latest.temperature + 2]
+                                            : [20, 45]
                                     }
                                     tick={{ fontSize: 11, fill: '#8b9bb4' }}
                                     axisLine={false}

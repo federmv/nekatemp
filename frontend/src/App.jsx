@@ -143,7 +143,7 @@ function App() {
                                     cursor={{ stroke: '#7000ff', strokeWidth: 1, strokeDasharray: '4 4' }}
                                 />
                                 <Area
-                                    type="basis"
+                                    type="monotone"
                                     dataKey="temperature"
                                     stroke="#00f2ff"
                                     strokeWidth={3}

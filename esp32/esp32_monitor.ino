@@ -1,61 +1,111 @@
+#include <DallasTemperature.h>
+#include <OneWire.h>
+#include <PubSubClient.h>
 #include <WiFi.h>
-#include <HTTPClient.h>
-#include <ArduinoJson.h>
 
-// Configuración de WiFi
-const char* ssid = "TU_WIFI_SSID";
-const char* password = "TU_WIFI_PASSWORD";
 
-// URL del servidor en Oracle Cloud (IP Pública)
-// Ejemplo: "http://123.45.67.89:3001/api/data"
-const char* serverUrl = "http://TU_IP_ORACLE_WEB:3001/api/data";
+#include <SinricPro.h>
+#include <SinricProTemperaturesensor.h>
+
+// --- Datos de tu Red ---
+const char *ssid = "H3SWifi_7582";
+const char *password = "30545392";
+const char *mqtt_server = "141.148.14.52";
+
+// --- Credenciales Sinric Pro ---
+#define APP_KEY "52fd38fd-f870-486c-bb5b-b43a8788fc53"
+#define APP_SECRET                                                             \
+  "8854d9ca-13fb-4e2d-9993-ce68b8b50cca-0fabc4ff-3cb8-4be4-89d4-68408875adbd"
+#define TEMP_SENSOR_ID "6977e2fd40cb098d90c6f980"
+
+// --- Configuración Sensor ---
+OneWire ourWire(15);
+DallasTemperature sensors(&ourWire);
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+unsigned long lastSend = 0;
+unsigned long lastSinricSend = 0; // Control de tiempo para Sinric
+
+bool onPowerState(const String &deviceId, bool &state) {
+  Serial.printf("Temperatura activada: %s\r\n", state ? "on" : "off");
+  return true;
+}
 
 void setup() {
   Serial.begin(115200);
+  sensors.begin();
 
-  // Conexión WiFi
+  // Conectar WiFi de forma manual
   WiFi.begin(ssid, password);
-  Serial.print("Conectando a WiFi");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-  Serial.println("\nConectado!");
+  Serial.println("\nWiFi Conectado");
+
+  // Configuración MQTT
+  client.setServer(mqtt_server, 1883);
+
+  // Configuración Sinric Pro
+  SinricProTemperaturesensor &mySensor = SinricPro[TEMP_SENSOR_ID];
+  mySensor.onPowerState(onPowerState);
+
+  // Inicializar SinricPro
+  SinricPro.onConnected([]() { Serial.printf("Conectado a SinricPro\r\n"); });
+  SinricPro.onDisconnected(
+      []() { Serial.printf("Desconectado de SinricPro\r\n"); });
+  SinricPro.begin(APP_KEY, APP_SECRET);
+}
+
+void reconnect() {
+  while (!client.connected()) {
+    Serial.print("Intentando conexión MQTT...");
+    // ID de cliente único: "ESP32_Agua"
+    if (client.connect("ESP32_Agua")) {
+      Serial.println("¡Conectado!");
+    } else {
+      Serial.print("Falló con estado: ");
+      Serial.print(client.state());
+      delay(5000);
+    }
+  }
 }
 
 void loop() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
+  // Manejo de Sinric Pro
+  SinricPro.handle();
 
-    // Simulación de lectura de sensor
-    float temp = random(2000, 3000) / 100.0; // 20.00 - 30.00
-    float hum = random(4000, 6000) / 100.0;  // 40.00 - 60.00
+  // Manejo de MQTT
+  if (!client.connected())
+    reconnect();
+  client.loop();
 
-    Serial.printf("Enviando T:%.2f, H:%.2f\n", temp, hum);
+  // Lectura del sensor
+  // (Leemos más seguido para tener el dato fresco siempre)
+  if (millis() - lastSend > 2000) {
+    sensors.requestTemperatures();
+    float temp = sensors.getTempCByIndex(0);
 
-    http.begin(serverUrl);
-    http.addHeader("Content-Type", "application/json");
+    if (temp != DEVICE_DISCONNECTED_C) {
+      // 1. Enviar a MQTT (cada 2 segs como antes)
+      String msg = String(temp);
+      client.publish("casa/esp32/datos", msg.c_str());
+      Serial.println("Temp enviada MQTT: " + msg);
 
-    // Crear JSON
-    StaticJsonDocument<200> doc;
-    doc["temperature"] = temp;
-    doc["humidity"] = hum;
-
-    String requestBody;
-    serializeJson(doc, requestBody);
-
-    int httpResponseCode = http.POST(requestBody);
-
-    if (httpResponseCode > 0) {
-      String response = http.getString();
-      Serial.println("Respuesta: " + response);
-    } else {
-      Serial.print("Error en el envío: ");
-      Serial.println(httpResponseCode);
+      // 2. Enviar a Sinric Pro (cada 60 segs para no saturar/bloquear)
+      if (millis() - lastSinricSend > 60000) {
+        SinricProTemperaturesensor &mySensor = SinricPro[TEMP_SENSOR_ID];
+        // sendTemperatureEvent(temperature, humidity = -1)
+        bool success = mySensor.sendTemperatureEvent(temp);
+        if (success) {
+          Serial.printf("Temp enviada a SinricPro: %f\r\n", temp);
+        } else {
+          Serial.printf("Fallo al enviar a SinricPro\r\n");
+        }
+        lastSinricSend = millis();
+      }
     }
-
-    http.end();
+    lastSend = millis();
   }
-
-  delay(10000); // Envío cada 10 segundos
 }

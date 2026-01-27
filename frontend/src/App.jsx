@@ -65,7 +65,7 @@ function App() {
                 <div className="glass temp-widget">
                     <div className="temp-circle">
                         <span className="temp-value neon-text">
-                            {latest.temperature?.toFixed(1)}
+                            {latest.temperature?.toFixed(2)}
                             <span className="temp-unit">°C</span>
                         </span>
                     </div>
@@ -143,7 +143,7 @@ function App() {
                                     cursor={{ stroke: '#7000ff', strokeWidth: 1, strokeDasharray: '4 4' }}
                                 />
                                 <Area
-                                    type="monotone"
+                                    type="basis"
                                     dataKey="temperature"
                                     stroke="#00f2ff"
                                     strokeWidth={3}

@@ -270,6 +270,26 @@ h1 {
   }
 }
 
+/* Noise Texture */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+}
+
+@media (max-width: 400px) {
+  h1 {
+    font-size: 2rem;
+  }
+}
+
 /* Responsive Design Overrides */
 @media (max-width: 900px) {
   .dashboard-grid {
@@ -279,67 +299,60 @@ h1 {
 
   #root {
     padding: 1rem;
+    max-width: 100%;
   }
 
   /* Compact Header on Mobile */
   header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
   }
 
   .status-badge {
-    align-self: flex-start;
+    margin-left: auto;
   }
 
   /* Temp Widget Scaling */
   .temp-widget {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
 
   .temp-circle {
-    width: 60vw;
-    height: 60vw;
-    max-width: 220px;
-    max-height: 220px;
+    width: 200px;
+    height: 200px;
   }
 
   .temp-value {
-    font-size: clamp(3.5rem, 15vw, 5rem);
-  }
-
-  .temp-unit {
-    font-size: clamp(1rem, 4vw, 1.5rem);
+    font-size: 3.5rem;
   }
 
   /* Chart Adjustments */
   .chart-widget {
-    min-height: 350px;
+    min-height: 300px;
     padding: 1rem;
   }
 
   .chart-controls {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .range-tabs {
     width: 100%;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     background: rgba(0, 0, 0, 0.2);
   }
 
   .range-tab {
-    flex: 1;
     padding: 8px 0;
     font-size: 0.7rem;
-  }
-}
-
-@media (max-width: 400px) {
-  h1 {
-    font-size: 2rem;
+    text-align: center;
   }
 }

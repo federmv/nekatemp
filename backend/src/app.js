@@ -36,7 +36,8 @@ if (fs.existsSync(frontendPath)) {
     app.use(express.static(frontendPath));
 
     // Fallback for SPA
-    app.get('*', (req, res) => {
+    // Fallback for SPA (Express 5 regex for "match all")
+    app.get(/^(.*)$/, (req, res) => {
         res.sendFile(path.join(frontendPath, 'index.html'));
     });
 } else {

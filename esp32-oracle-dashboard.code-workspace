@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../../.agents/skills/nodejs-backend-patterns"
+		}
+	],
+	"settings": {}
+}

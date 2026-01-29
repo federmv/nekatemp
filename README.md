@@ -41,7 +41,7 @@ Para que aparezca el botón "Instalar App" en Android, necesitas HTTPS. Usaremos
 
 3. **Acceder:**
    Entra a: `https://141.148.14.52.sslip.io` (¡Nota la 's' en https!).
-
+   la key esta en Downloads y se llama mi_llave.key
 ---
 
 ## 📡 Configuración Técnica

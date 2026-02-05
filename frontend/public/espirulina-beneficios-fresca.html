@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espirulina Máxima Fresca: 10 Beneficios que Transformarán tu Vida</title>
+    <meta name="description"
+        content="Descubre los 10 beneficios científicos de la espirulina fresca para personas comunes. Proteína, energía, inmunidad y más.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d285;
+            --primary-dark: #00a86b;
+            --secondary: #007bff;
+            --accent: #ffcc00;
+            --bg: #050a09;
+            --text: #ffffff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Snap Scrolling */
+        .container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .content {
+            z-index: 10;
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (max-width: 968px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+
+        /* Background Effects */
+        .bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 210, 133, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #00d285 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #00d285 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .benefit-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: var(--primary);
+            color: #000;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .component-box {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+        }
+
+        .component-label {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .component-value {
+            font-size: 1.25rem;
+            font-weight: 400;
+        }
+
+        .improvement-box {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Image Container */
+        .image-container {
+            position: relative;
+            width: 85%;
+            margin: 0 auto;
+            aspect-ratio: 1;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        section:hover .image-container img {
+            transform: scale(1.05);
+        }
+
+        /* Graphics & Charts */
+        .chart-container {
+            margin-top: 2rem;
+            background: var(--glass);
+            padding: 1.5rem;
+            border-radius: 20px;
+        }
+
+        .progress-bar-container {
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar-wrapper {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            width: 0;
+            transition: width 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+
+        section.active .progress-bar {
+            width: var(--percent);
+        }
+
+        .chart-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Navigation */
+        .nav-dots {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.5);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* Intro Section */
+        #intro h1 {
+            font-size: 6rem;
+            text-align: center;
+        }
+
+        #intro {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0) translateX(-50%);
+            }
+
+            40% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+
+            60% {
+                transform: translateY(-5px) translateX(-50%);
+            }
+        }
+
+        .source-tag {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 2rem;
+            font-style: italic;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 1rem;
+            display: block;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        section.active .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.4s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.6s;
+        }
+
+        /* Floating elements */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="nav-dots" id="navDots"></div>
+
+    <div class="container" id="scrollContainer">
+
+        <!-- INTRO -->
+        <section id="intro" class="active">
+            <div class="bg-gradient"></div>
+            <div class="reveal">
+                <span class="benefit-tag">Descubre el Superalimento</span>
+                <h1>Espirulina Máxima Fresca</h1>
+                <p style="font-size: 1.5rem; max-width: 800px; margin: 0 auto; color: rgba(255, 255, 255, 0.7);">
+                    Salud, energía y vitalidad en cada micro-dosis. 10 beneficios científicos explicados para ti.
+                </p>
+            </div>
+            <div class="scroll-hint">
+                <p>Desliza para empezar</p>
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- RESEÑA INICIAL -->
+        <section id="overview">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+                    <span class="benefit-tag">¿Qué es la Espirulina?</span>
+                    <h2 class="reveal">El "Oro Verde" de la Naturaleza</h2>
+                    <p class="improvement-box reveal delay-1" style="font-size: 1.2rem; margin-bottom: 2rem;">
+                        La Espirulina es una pequeña planta acuática (cianobacteria) que crece en forma de espiral. Es
+                        tan poderosa que la NASA la usa para alimentar a sus astronautas.
+                    </p>
+                    <div class="component-box reveal delay-2">
+                        <span class="component-label">Su Apariencia</span>
+                        <p class="component-value">Es una pasta cremosa de color verde esmeralda vibrante, con un sabor
+                            suave y neutro que combina con todo.</p>
+                    </div>
+                    <div class="reveal delay-3">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">¿Por qué FRESCA es mejor?</h3>
+                        <ul style="list-style: none; color: rgba(255, 255, 255, 0.7); line-height: 1.6;">
+                            <li>✅ <strong>100% Viva:</strong> Mantiene todas sus enzimas y vitaminas intactas.</li>
+                            <li>✅ <strong>Sin Olor Fuerte:</strong> A diferencia del polvo, la fresca no huele "a
+                                pescado".</li>
+                            <li>✅ <strong>Absorción Total:</strong> Tu cuerpo la reconoce y aprovecha al instante.</li>
+                            <li>❌ <strong>Evita Procesos:</strong> El polvo y las cápsulas pierden nutrientes por el
+                                calor del secado.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="fresh_spirulina_comparison_1770249323663.png" alt="Espirulina Fresca vs Polvo">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. PERFIL NUTRICIONAL -->
+        <section id="benefit-1" style="--percent: 95%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Perfil Nutricional Excepcional</h2>
+                    <div class="improvement-box reveal delay-1" style="font-size: 1.1rem;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 0.5rem;">🧬 <strong>Proteína de élite:</strong> 60-70% de su peso,
+                                contiene los 9 aminoácidos esenciales</li>
+                            <li style="margin-bottom: 0.5rem;">🩸 <strong>Rica en hierro:</strong> altamente
+                                biodisponible, ideal para vegetarianos</li>
+                            <li style="margin-bottom: 0.5rem;">💊 <strong>Vitaminas B:</strong> especialmente B1, B2, B3
+                                y B12 (forma análoga)</li>
+                            <li style="margin-bottom: 0.5rem;">🛡️ <strong>Antioxidantes potentes:</strong> ficocianina
+                                (azul único), betacarotenos, vit. E</li>
+                            <li style="margin-bottom: 0.5rem;">💎 <strong>Minerales:</strong> magnesio, potasio,
+                                manganeso y selenio</li>
+                            <li style="margin-bottom: 0.5rem;">🔥 <strong>GLA:</strong> ácido graso omega-6
+                                antiinflamatorio</li>
+                            <li style="margin-bottom: 0.5rem;">🌿 <strong>Clorofila:</strong> propiedades
+                                desintoxicantes profundas</li>
+                        </ul>
+                    </div>
+                    <div class="source-tag reveal delay-2">Fuente: Karkos, P. D., et al. (2011). Spirulina in clinical
+                        practice: Evidence-based human applications.</div>
+                    <div class="chart-container reveal delay-3">
+                        <p style="font-size: 0.9rem; color: var(--primary);">Densidad de Nutrientes</p>
+                        <div class="chart-label"><span>Espirulina vs Otros Superalimentos</span><span>Superior</span>
+                        </div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 95%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_energy_vitality_1770248630213.png" alt="Energía Natural">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PROTEINA -->
+        <section id="benefit-2" style="--percent: 70%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Super-proteína para tus músculos</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Componente Clave</span>
+                        <p class="component-value"><strong>9 Aminoácidos Esenciales</strong> (Especialmente Leucina,
+                            Isoleucina y Valina para el crecimiento muscular)</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        <ul
+                            style="list-style: none; padding: 0; font-size: 1rem; line-height: 1.5; color: rgba(255,255,255,0.7);">
+                            <li>🚫 <strong>Sin colesterol ni grasas saturadas:</strong> A diferencia de las proteínas
+                                animales.</li>
+                            <li>⚡ <strong>Digestibilidad del 83-90%:</strong> Muy superior a la proteína de soja o
+                                trigo.</li>
+                            <li>🔬 <strong>Sin celulosa:</strong> Sus paredes celulares facilitan una absorción casi
+                                instantánea.</li>
+                            <li>🍳 <strong>Sin cocción:</strong> Se asimila de forma natural sin perder nutrientes por
+                                calor.</li>
+                        </ul>
+                        <p style="font-size: 1.1rem; color: var(--primary); margin-top: 15px; font-weight: 600;">
+                            Una opción excepcional para deportistas y dietas basadas en plantas que buscan optimizar su
+                            fuerza y recuperación.
+                        </p>
+                        <p style="font-size: 0.9rem; color: #aaa; margin-top: 10px;">• Solo 10 gramos aportan entre 6 y
+                            7 gramos de proteína pura.</p>
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Ciferri, O. (1983). Spirulina, the edible
+                        microorganism. Microbiological reviews.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Espirulina</span><span>70% Proteína</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 70%;"></div>
+                        </div>
+                        <div class="chart-label"><span>Carne de Res</span><span>26% Proteína</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 26%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_protein_muscles_1770248607278.png" alt="Proteína Mascular">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. FICOCIANINA (PARTE 1) -->
+        <section id="benefit-3" style="--percent: 95%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Ficocianina: El "Oro Azul" Único</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">¿Qué es exactamente?</span>
+                        <p class="component-value">Es una proteína fotosintética exclusiva que representa el
+                            <strong>15-20% del peso</strong> de la espirulina.
+                        </p>
+                    </div>
+                    <div class="improvement-box reveal delay-2" style="font-size: 1.1rem;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li>💎 <strong>Dosis Reales:</strong> Mientras otros se miden en microgramos, 10g de
+                                espirulina te dan <strong>2,000mg</strong> de ficocianina pura.</li>
+                            <li>⚡ <strong>Potencia:</strong> 20 veces más potente que la Vitamina C y 16 veces más que
+                                la Vitamina E.</li>
+                            <li>🌡️ <strong>Capacidad ORAC:</strong> De las más altas del mundo vegetal para neutralizar
+                                radicales libres.</li>
+                        </ul>
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Romay, C., et al. (1998). C-phycocyanin: a potent
+                        antioxidant and anti-inflammatory agent.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Capacidad Antioxidante (ORAC)</span><span>Nivel Élite</span>
+                        </div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 98%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_antioxidant_cells_1770248644460.png" alt="Ficocianina Molecular">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3b. FICOCIANINA DETALLES (PARTE 2) -->
+        <section id="benefit-3-details">
+            <div class="bg-gradient"
+                style="background: radial-gradient(circle at 20% 50%, rgba(255, 69, 0, 0.1) 0%, transparent 70%);">
+            </div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Poder Sistémico Documentado</h2>
+                    <div class="improvement-box reveal delay-1" style="font-size: 0.95rem; line-height: 1.4;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div>
+                                <p>🛡️ <strong>Antiinflamatorio:</strong> Inhibe la COX-2 (como el ibuprofeno natural).
+                                </p>
+                                <p>🧠 <strong>Neuroprotector:</strong> Cruza la barrera cerebral, protegiendo tus
+                                    neuronas.</p>
+                                <p>🧪 <strong>Antitumoral:</strong> Induce la muerte natural (apoptosis) de células
+                                    dañinas.</p>
+                            </div>
+                            <div>
+                                <p>🏥 <strong>Protección Hepática:</strong> Regenera y protege el hígado de toxinas y
+                                    metales.</p>
+                                <p>🛡️ <strong>Sistema Inmune:</strong> Estimula células "Natural Killer" y linfocitos.
+                                </p>
+                                <p>❤️ <strong>Cardiovascular:</strong> Evita que el colesterol "malo" se oxide en tus
+                                    arterias.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-box reveal delay-2" style="margin-top: 1.5rem;">
+                        <span class="component-label">Absorción y Biodisponibilidad</span>
+                        <p style="font-size: 1rem;">✅ <strong>EXCELENTE:</strong> Es soluble en agua. Pasa al torrente
+                            sanguíneo rápidamente y su efecto es detectable en solo <strong>1-2 horas</strong> tras el
+                            consumo.</p>
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: McCarty, M. F. (2007). Clinical potential of
+                        Spirulina as a source of phycocyanobilin.</div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container">
+                        <img src="spirulina_detox_purity_1770248737400.png" alt="Pureza Sistémica">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. BETACAROTENOS (PARTE 1) -->
+        <section id="benefit-4" style="--percent: 100%;">
+            <div class="bg-gradient"
+                style="background: radial-gradient(circle at 80% 20%, rgba(255, 140, 0, 0.15) 0%, transparent 50%);">
+            </div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Betacarotenos: El Precursor de Oro</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">¿Qué son?</span>
+                        <p class="component-value">Pigmentos naturales que tu cuerpo transforma en <strong>Vitamina
+                                A</strong> de forma segura y eficiente.</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2" style="font-size: 1.1rem;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li>🥕 <strong>Dosis Real:</strong> 5g de espirulina aportan entre el <strong>100% y
+                                    200%</strong> de tu necesidad diaria de Vit. A.</li>
+                            <li>🛡️ <strong>Cero Toxicidad:</strong> A diferencia del retinol animal, el cuerpo solo
+                                convierte lo que necesita. ¡Ideal para embarazadas!</li>
+                            <li>🔬 <strong>Forma Trans:</strong> Contiene la forma más biodisponible del mundo vegetal.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: McCarty, M. F. (2007). Clinical potential of
+                        Spirulina as a source of phycocyanobilin.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Vitamina A Diaria (5g Espirulina)</span><span>150%
+                                promedio</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar"
+                                style="--percent: 100%; background: linear-gradient(90deg, #ffa500, #ff4500);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_eyes_skin_1770248659118.png" alt="Betacarotenos en acción">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4b. BETACAROTENOS DETALLES (PARTE 2) -->
+        <section id="benefit-4-details">
+            <div class="bg-gradient"
+                style="background: radial-gradient(circle at 20% 50%, rgba(255, 165, 0, 0.1) 0%, transparent 70%);">
+            </div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Vista, Piel e Inmunidad</h2>
+                    <div class="improvement-box reveal delay-1" style="font-size: 0.95rem; line-height: 1.4;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div>
+                                <p>👁️ <strong>Salud Ocular:</strong> Protege la retina de la luz azul y mejora la
+                                    visión nocturna (Rodopsina).</p>
+                                <p>✨ <strong>Piel Radiante:</strong> Aumenta la elasticidad y ofrece una protección UV
+                                    natural desde dentro.</p>
+                            </div>
+                            <div>
+                                <p>🛡️ <strong>Mucosas:</strong> Refuerza la primera línea de defensa contra infecciones
+                                    respiratorias.</p>
+                                <p>🧬 <strong>ADN:</strong> Neutraliza el "oxígeno singlete", un radical libre que daña
+                                    el núcleo celular.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-box reveal delay-2"
+                        style="margin-top: 1.5rem; border-left: 4px solid #ffa500;">
+                        <span class="component-label">Consejo Profesional de Absorción</span>
+                        <p style="font-size: 1rem;">💡 <strong>Combínala con grasa:</strong> Al ser liposoluble,
+                            consumir tu espirulina con <strong>aguacate, nueces o aceite de oliva</strong> mejora su
+                            absorción hasta <strong>5 veces</strong>.</p>
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: National Institutes of Health (NIH). Vitamin A and
+                        Carotenoids Fact Sheet.</div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container">
+                        <!-- Usamos la imagen de vitalidad que representa salud general -->
+                        <img src="spirulina_energy_vitality_1770248630213.png" alt="Salud Integral">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- diapositiva de SINERGIA ANTIOXIDANTE -->
+        <section id="benefit-sinergia">
+            <div class="bg-gradient"
+                style="background: radial-gradient(circle at 50% 50%, rgba(0, 210, 133, 0.15) 0%, transparent 70%);">
+            </div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Protección de 360 Grados</h2>
+                    <div class="improvement-box reveal delay-1" style="font-size: 0.95rem;">
+                        <p style="margin-bottom: 1rem;">No es solo un nutriente; es una orquesta biológica protegiendo
+                            cada rincón de tu célula:</p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div
+                                style="background: rgba(0, 180, 216, 0.1); padding: 1rem; border-radius: 15px; border: 1px solid rgba(0, 180, 216, 0.3);">
+                                <h4 style="color: var(--accent); margin-bottom: 0.5rem;">Hidrosolubles</h4>
+                                <p>• <strong>Ficocianina:</strong> Limpia sangre y fluidos.</p>
+                                <p>• <strong>Vitamina C:</strong> Refuerzo inmune.</p>
+                            </div>
+                            <div
+                                style="background: rgba(255, 165, 0, 0.2); padding: 1rem; border-radius: 15px; border: 1px solid rgba(255, 165, 0, 0.4);">
+                                <h4 style="color: #ffa500; margin-bottom: 0.5rem;">Liposolubles</h4>
+                                <p>• <strong>Betacarotenos:</strong> Protegen tejidos grasos.</p>
+                                <p>• <strong>Vitamina E:</strong> Escudo de membranas.</p>
+                            </div>
+                        </div>
+                        <p style="margin-top: 1rem; color: var(--primary);">⭐ <strong>Plus:</strong> SOD (Enzima
+                            ultra-potente) + Selenio, Zinc y Clorofila.</p>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="chart-container"
+                        style="background: var(--glass); border: 1px solid var(--glass-border);">
+                        <p style="font-size: 1.1rem; color: var(--primary); margin-bottom: 1rem; font-weight: 600;">
+                            Densidad Antioxidante (ORAC)</p>
+                        <div class="chart-label"><span>Espirulina (10g)</span><span>~6,000 ⭐</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 100%;"></div>
+                        </div>
+
+                        <div class="chart-label"><span>Chocolate Negro (10g)</span><span>2,080</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 35%;"></div>
+                        </div>
+
+                        <div class="chart-label"><span>Nueces Pecanas (10g)</span><span>1,790</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 30%;"></div>
+                        </div>
+
+                        <div class="chart-label"><span>Arándanos (10g)</span><span>460</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 8%;"></div>
+                        </div>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">*Comparativa de potencia en dosis
+                            iguales de 10g.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. HIERRO (ACTUALIZADO CON HONESTIDAD) -->
+        <section id="benefit-5" style="--percent: 60%;">
+            <div class="bg-gradient"
+                style="background: radial-gradient(circle at 50% 50%, rgba(200, 0, 0, 0.1) 0%, transparent 70%);"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Hierro: Fuente Real y Biodisponible</h2>
+                    <div class="improvement-box reveal delay-1">
+                        <p style="margin-bottom: 1rem;">La espirulina es una fuente <strong>BUENA (⭐⭐)</strong> de
+                            hierro, especialmente valiosa por su absorción.</p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>🩸 <strong>5g de Espirulina:</strong> Aportan 1.4 - 2.5 mg (10-18% de tu necesidad
+                                diaria).</li>
+                            <li>🔬 <strong>Biodisponibilidad:</strong> Al estar unido a la clorofila, se absorbe mucho
+                                mejor que el hierro de las espinacas.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_iron_blood_1770248675498.png" alt="Hierro y Sangre">
+                    </div>
+                    <div class="source-tag" style="margin-top: 1rem;">Fuente: Simpore, J., et al. (2005). Nutrition
+                        rehabilitation of children utilizing Spirulina.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MANGANESO - LA ESTRELLA -->
+        <section id="benefit-manganese">
+            <div class="bg-gradient"
+                style="background: radial-gradient(circle at 20% 50%, rgba(0, 255, 131, 0.1) 0%, transparent 70%);">
+            </div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Manganeso: Donde la Espirulina Brilla</h2>
+                    <div class="improvement-box reveal delay-1">
+                        <p>Es una de las mejores fuentes naturales de este mineral crítico:</p>
+                        <ul
+                            style="display: flex; flex-wrap: wrap; list-style: none; gap: 10px; padding: 0; margin-top: 1rem;">
+                            <li style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 10px;">✅
+                                <strong>Dosis Élite:</strong> 5g cubren el 40-60% VD
+                            </li>
+                            <li style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 10px;">🧠
+                                <strong>Neuronas:</strong> Estrés oxidativo neuronal
+                            </li>
+                            <li style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 10px;">💀
+                                <strong>Huesos:</strong> Cartílago y colágeno
+                            </li>
+                            <li style="background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 10px;">🔄
+                                <strong>SOD:</strong> Longevidad celular
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="chart-container"
+                        style="background: var(--glass); border: 1px solid var(--glass-border);">
+                        <p style="font-size: 1.1rem; color: var(--primary); margin-bottom: 1rem; font-weight: 600;">
+                            Aporte de Manganeso (Dosis 5g)</p>
+                        <div class="chart-label"><span>Espirulina</span><span>~50% VD</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 50%;"></div>
+                        </div>
+                        <div class="chart-label"><span>Almendras (30g)</span><span>28% VD</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 28%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAGNESIO Y POTASIO (REALIDAD) -->
+        <section id="minerals-reality">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Magnesio y Potasio</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" class="reveal delay-1">
+                        <div class="component-box" style="background: rgba(255, 255, 255, 0.05);">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">🧠 Magnesio (Útil)</h4>
+                            <p style="font-size: 0.9rem;">5g aportan ~20mg (5-6% VD). Es un buen "plus" para tus 300
+                                reacciones enzimáticas, pero no es tu fuente principal.</p>
+                        </div>
+                        <div class="component-box" style="background: rgba(255, 255, 255, 0.03);">
+                            <h4 style="color: #888; margin-bottom: 0.5rem;">🍌 Potasio (Bajo)</h4>
+                            <p style="font-size: 0.9rem;">5g aportan ~75mg (2% VD). El aporte es insignificante frente a
+                                un plátano o una papa.</p>
+                        </div>
+                    </div>
+                    <div class="improvement-box reveal delay-2"
+                        style="margin-top: 1.5rem; background: rgba(0, 180, 216, 0.05); border-left: 4px solid var(--accent);">
+                        <p style="font-size: 1rem;"><strong>Sinergia Mineral:</strong> La clave es que vienen
+                            <strong>quelados naturalmente</strong> (unidos a aminoácidos), lo que garantiza absorción
+                            sin interferencias.
+                        </p>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container">
+                        <img src="fresh_spirulina_comparison_1770249323663.png" alt="Equilibrio Mineral">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESUMEN MINERAL -->
+        <section id="minerals-summary">
+            <div class="bg-gradient"
+                style="background: linear-gradient(to bottom, transparent, rgba(0, 255, 131, 0.05));"></div>
+            <div class="content" style="flex-direction: column; align-items: center; justify-content: center;">
+
+                <h2 class="reveal" style="text-align: center; margin-bottom: 2rem;">¿Qué minerales obtengo realmente?
+                </h2>
+                <div class="reveal delay-1"
+                    style="width: 100%; max-width: 900px; background: var(--glass); padding: 2rem; border-radius: 30px; border: 1px solid var(--glass-border);">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 1.1rem;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--glass-border);">
+                                <th style="padding: 1rem; color: var(--primary);">Mineral</th>
+                                <th style="padding: 1rem; color: var(--primary);">Aporte (5g)</th>
+                                <th style="padding: 1rem; color: var(--primary);">% VD*</th>
+                                <th style="padding: 1rem; color: var(--primary);">Calificación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--glass-border);">
+                                <td style="padding: 1rem;"><strong>Manganeso</strong></td>
+                                <td style="padding: 1rem;">~1 mg</td>
+                                <td style="padding: 1rem;">50%</td>
+                                <td style="padding: 1rem; color: #00ff83;">⭐ EXCELENTE</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--glass-border);">
+                                <td style="padding: 1rem;"><strong>Hierro</strong></td>
+                                <td style="padding: 1rem;">~2 mg</td>
+                                <td style="padding: 1rem;">15%</td>
+                                <td style="padding: 1rem; color: #00d285;">⭐⭐ BUENO</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--glass-border);">
+                                <td style="padding: 1rem;"><strong>Magnesio</strong></td>
+                                <td style="padding: 1rem;">~20 mg</td>
+                                <td style="padding: 1rem;">6%</td>
+                                <td style="padding: 1rem; color: var(--accent);">⭐ PLUS</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--glass-border);">
+                                <td style="padding: 1rem;"><strong>Selenio</strong></td>
+                                <td style="padding: 1rem;">Varía</td>
+                                <td style="padding: 1rem;">1-5%</td>
+                                <td style="padding: 1rem; color: #888;">Variable</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 1rem;"><strong>Potasio</strong></td>
+                                <td style="padding: 1rem;">~75 mg</td>
+                                <td style="padding: 1rem;">2%</td>
+                                <td style="padding: 1rem; color: #ff4500;">Bajo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #888; text-align: center;">*Porcentaje
+                        aproximado del Valor Diario recomendado basado en una dosis estándar.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. INMUNIDAD -->
+        <section id="benefit-6" style="--percent: 90%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Defensas de acero</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Componente Clave</span>
+                        <p class="component-value"><strong>Polisacáridos y Ficocianina</strong> (Estimulan las células
+                            "Natural Killer" que atacan virus y bacterias)</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        Tu cuerpo se volverá un búnker contra gripes, bacterias y virus. Te enfermarás menos y te
+                        recuperarás en tiempo récord.
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Belay, A., et al. (1993). Current knowledge on
+                        potential health benefits of Spirulina.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Resistencia Inmune</span><span>90% Mejora</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 90%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_immune_shield_1770248690348.png" alt="Sistema Inmune">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. CORAZON Y COLESTEROL -->
+        <section id="benefit-7" style="--percent: 85%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Corazón sano y arterias limpias</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Cómo lo logra</span>
+                        <p class="component-value"><strong>Ácido Gamma-Linolénico (GLA)</strong> (Un Omega-6 único que
+                            "barre" las grasas de las arterias) y la <strong>Ficocianina</strong> impiden que las grasas
+                            se oxiden y se peguen a tus arterias.</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        Ayuda a reducir significativamente el colesterol "malo" (LDL) y los triglicéridos, permitiendo
+                        que tu sangre fluya libremente y tu corazón trabaje sin esfuerzo.
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Torres-Duran, P. V., et al. (2007). Antihyperlipemic
+                        and antihypertensive effects of Spirulina.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Reducción de Colesterol Malo</span><span>Efectividad Alta</span>
+                        </div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_heart_circulation_1770248705736.png" alt="Salud Corazón">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. CEREBRO -->
+        <section id="benefit-8" style="--percent: 80%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Mente ágil y concentrada</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Componente Clave</span>
+                        <p class="component-value"><strong>Fenilalanina y Vitamina B3</strong> (Nutrientes clave para
+                            producir dopamina y mejorar la velocidad mental)</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        Sentirás mayor claridad mental, mejor concentración en el trabajo o estudio y una memoria más
+                        afinada y rápida.
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Mazo, V. K., et al. (2004). Microalgae Spirulina as a
+                        source of bioavailable nutrients.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Claridad Mental</span><span>80%</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_brain_focus_1770248722100.png" alt="Cerebro y Foco">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. DETOX -->
+        <section id="benefit-9" style="--percent: 92%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Limpieza profunda natural</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Componente Clave</span>
+                        <p class="component-value"><strong>Clorofila y Ficocianina</strong> (Actúan como imanes que
+                            atrapan y expulsan metales pesados de la sangre)</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        Ayuda a tu cuerpo a expulsar toxinas y metales pesados del ambiente. Te sentirás más ligero,
+                        limpio y con una digestión mejorada.
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Misbahuddin, M., et al. (2006). Efficacy of spirulina
+                        extract in the treatment of arsenic poisoning.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Poder Desintoxicante</span><span>92%</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 92%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_detox_purity_1770248737400.png" alt="Desintoxicación">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. HUESOS -->
+        <section id="benefit-10" style="--percent: 88%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Soporte para todo tu cuerpo</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Componente Clave</span>
+                        <p class="component-value"><strong>Manganeso y Prolidasa</strong> (Activa la enzima necesaria
+                            para formar cartílago y colágeno nuevo)</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        Huesos más resistentes y articulaciones lubricadas para que puedas moverte, correr y jugar con
+                        tus hijos sin dolores ni crujidos.
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Institute of Medicine (US) Panel on Micronutrients.
+                        Dietary Reference Intakes for Manganese.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Salud Ósea</span><span>88%</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 88%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_bones_joints_1770248751836.png" alt="Huesos y Articulaciones">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. PERDIDA DE PESO -->
+        <section id="benefit-11" style="--percent: 90%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Apoyo para tu peso ideal</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Cómo lo logra</span>
+                        <p class="component-value"><strong>Fenilalanina y Vitaminas B</strong> (Envía señales de "estoy
+                            lleno" al cerebro para evitar el hambre por ansiedad)</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        Sentirás menos hambre entre comidas (especialmente antojos de dulces) y tu cuerpo quemará
+                        energía de forma más eficiente, ayudándote a llegar a tu peso ideal.
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: DiNicolantonio, J. J., et al. (2020). Health benefits
+                        of Spirulina. Open Heart.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Sensación de Saciedad</span><span>90% Mejora</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 90%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_weight_loss_satiety_1770249725722.png" alt="Pérdida de Peso">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. AZUCAR EN SANGRE -->
+        <section id="benefit-12" style="--percent: 82%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Control natural del azúcar</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Cómo lo logra</span>
+                        <p class="component-value"><strong>Magnesio y Ficocianina</strong> (Ayudan a que la insulina
+                            trabaje mejor y el azúcar no se quede en la sangre)</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        Evitarás esos picos de azúcar que causan sueño después de comer y mareos. Mantendrás tus niveles
+                        estables y saludables de forma natural.
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Parikh, P., et al. (2001). Role of Spirulina in the
+                        control of glycemia and lipemia in type 2 diabetes.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Estabilidad de Glucosa</span><span>82%</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 82%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <!-- Usamos la imagen de energía/vitalidad que representa equilibrio metabólico -->
+                        <img src="spirulina_energy_vitality_1770248630213.png" alt="Control de Azúcar">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. PRESION ARTERIAL -->
+        <section id="benefit-13" style="--percent: 78%;">
+            <div class="bg-gradient"></div>
+            <div class="content">
+                <div class="text-side">
+
+                    <h2 class="reveal">Presión arterial bajo control</h2>
+                    <div class="component-box reveal delay-1">
+                        <span class="component-label">Cómo lo logra</span>
+                        <p class="component-value"><strong>Arginina y Ficocianina</strong> (Precursores del Óxido
+                            Nítrico que dilata y relaja los vasos sanguíneos)</p>
+                    </div>
+                    <div class="improvement-box reveal delay-2">
+                        Tus venas y arterias se vuelven más elásticas y relajadas, permitiendo que la sangre fluya sin
+                        resistencia y bajando la presión de forma natural y segura.
+                    </div>
+                    <div class="source-tag reveal delay-3">Fuente: Juarez-Oropeza, M. A., et al. (2009).
+                        Antihyperlipemic and antihypertensive effects of Spirulina.</div>
+                    <div class="chart-container reveal delay-3">
+                        <div class="chart-label"><span>Relajación Arterial</span><span>78%</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 78%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container floating">
+                        <img src="spirulina_heart_circulation_1770248705736.png" alt="Presión Arterial">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EVIDENCIA CIENTÍFICA -->
+        <section id="evidence">
+            <div class="bg-gradient"
+                style="background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);"></div>
+            <div class="content">
+                <div class="text-side">
+                    <span class="benefit-tag">Respaldo Real</span>
+                    <h2 class="reveal">Evidencia Científica en Humanos</h2>
+                    <div class="improvement-box reveal delay-1" style="font-size: 0.95rem;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 1rem;">🏃 <strong>Atletas:</strong> 7.5g/día redujeron el daño
+                                oxidativo post-ejercicio en un <strong>47%</strong>.</li>
+                            <li style="margin-bottom: 1rem;">❤️ <strong>Hipertensión:</strong> 4.5g/día bajaron la
+                                presión arterial mediante el aumento de óxido nítrico.</li>
+                            <li style="margin-bottom: 1rem;">🍭 <strong>Diabetes T2:</strong> 2g/día mejoraron el
+                                control glucémico y redujeron el estrés celular.</li>
+                            <li style="margin-bottom: 1rem;">🤰 <strong>Embarazo:</strong> 1-2g/día aumentaron la
+                                hemoglobina y protegieron a la madre.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="component-box"
+                        style="border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3);">
+                        <p style="font-size: 1.1rem; color: var(--primary); margin-bottom: 1rem; font-weight: 600;">
+                            Marcadores de Salud</p>
+                        <div class="chart-label"><span>Reducción Daño Oxidativo</span><span>-47%</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 47%; background: var(--accent);"></div>
+                        </div>
+                        <div class="chart-label" style="margin-top: 1rem;"><span>Mejora de
+                                Hemoglobina</span><span>Detectada</span></div>
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar" style="--percent: 75%; background: var(--primary);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TIPS DE OPTIMIZACIÓN -->
+        <section id="optimization">
+            <div class="bg-gradient"
+                style="background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.05) 0%, transparent 70%);"></div>
+            <div class="content">
+                <div class="text-side">
+                    <span class="benefit-tag">Maximiza tu Neka</span>
+                    <h2 class="reveal">Cómo sacar el mayor provecho</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" class="reveal delay-1">
+                        <div class="component-box" style="background: rgba(0, 255, 131, 0.05);">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">✅ Sinergia Total</h4>
+                            <p style="font-size: 0.9rem;">• <strong>Timing:</strong> En ayunas para absorber
+                                ficocianina.</p>
+                            <p style="font-size: 0.9rem;">• <strong>Con Grasa:</strong> Aceite de oliva o aguacate para
+                                Vit. A/E.</p>
+                            <p style="font-size: 0.9rem;">• <strong>Combo:</strong> Mézclala con Cúrcuma o Omega-3.</p>
+                        </div>
+                        <div class="component-box" style="background: rgba(255, 69, 0, 0.05);">
+                            <h4 style="color: #ff4500; margin-bottom: 0.5rem;">🚫 Evita Errores</h4>
+                            <p style="font-size: 0.9rem;">• <strong>No cocinar:</strong> El calor destruye los
+                                antioxidantes.</p>
+                            <p style="font-size: 0.9rem;">• <strong>Calor:</strong> No calentar a más de 60°C.</p>
+                            <p style="font-size: 0.9rem;">• <strong>Luz:</strong> Guardar protegida del sol directo.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-side reveal">
+                    <div class="image-container">
+                        <img src="fresh_spirulina_comparison_1770249323663.png" alt="Frescura Neka">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MENSAJE FINAL -->
+        <section id="final-message">
+            <div class="bg-gradient"
+                style="background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);">
+            </div>
+            <div class="content">
+                <div class="text-side" style="width: 100%; text-align: center;">
+                    <span class="benefit-tag">Resumen Final</span>
+                    <h2 class="reveal" style="font-size: 3.5rem;">Un arsenal en dosis minúsculas</h2>
+                    <div class="improvement-box reveal delay-1"
+                        style="max-width: 800px; margin: 2rem auto; font-size: 1.2rem; background: rgba(255, 255, 255, 0.03);">
+                        <p style="margin-bottom: 2rem; font-weight: 600; color: var(--primary);">Solo 5 gramos diarios
+                            te entregan:</p>
+                        <ul
+                            style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem; text-align: left;">
+                            <li
+                                style="padding: 1rem; border-left: 4px solid var(--accent); background: rgba(0, 180, 216, 0.05);">
+                                💎 <strong>~1,000 mg de Ficocianina:</strong> Antiinflamatorio y neuroprotector de
+                                élite.</li>
+                            <li
+                                style="padding: 1rem; border-left: 4px solid #ffa500; background: rgba(255, 165, 0, 0.05);">
+                                🥕 <strong>~20 mg de Betacarotenos:</strong> 100-200% Vitamina A (Vista y Piel).</li>
+                            <li
+                                style="padding: 1rem; border-left: 4px solid var(--primary); background: rgba(0, 255, 131, 0.05);">
+                                🌿 <strong>Vitamina E + Clorofila:</strong> Espectro completo de carotenoides.</li>
+                        </ul>
+                        <p style="margin-top: 2rem; font-style: italic; color: #aaa;">"Es uno de los suplementos con
+                            mejor relación costo-beneficio antioxidante del mercado."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section id="cta">
+            <div class="bg-gradient"></div>
+            <div class="reveal" style="text-align: center;">
+                <h2 style="font-size: 5rem;">¡Empieza hoy mismo!</h2>
+                <p style="font-size: 1.8rem; margin-bottom: 3rem; color: rgba(255, 255, 255, 0.7);">
+                    Tu cuerpo es tu templo. La Espirulina Fresca es tu mejor aliado.
+                </p>
+                <div style="display: flex; gap: 2rem; justify-content: center;">
+                    <a href="#"
+                        style="padding: 1.5rem 3rem; background: var(--primary); color: #000; text-decoration: none; border-radius: 50px; font-weight: 800; font-size: 1.2rem; transition: transform 0.3s ease;">OBTENER
+                        MI DOSIS</a>
+                    <a href="#intro"
+                        style="padding: 1.5rem 3rem; background: transparent; border: 1px solid var(--primary); color: var(--primary); text-decoration: none; border-radius: 50px; font-weight: 800; font-size: 1.2rem;">VOLVER
+                        A VER</a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Navigation Dots logic
+        const sections = document.querySelectorAll('section');
+        const navDots = document.getElementById('navDots');
+
+        sections.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                sections[index].scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Update active dot
+                    const index = Array.from(sections).indexOf(entry.target);
+                    document.querySelectorAll('.dot').forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+
+</html>

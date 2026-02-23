@@ -26,7 +26,6 @@ app.use((req, res, next) => {
 });
 
 // API Routes — MUST be before static files
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api', apiRoutes);
 
 // Serve Static Frontend

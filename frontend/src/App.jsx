@@ -69,12 +69,14 @@ function TempChart({ timestamps, temperatures, range }) {
 
         const rect = containerRef.current.getBoundingClientRect();
 
-        const fmtTime = (u, v) => {
-            const d = new Date(v * 1000);
-            if (range === 'live' || range === '1h') {
-                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            }
-            return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+        const fmtTime = (u, vals) => {
+            return vals.map(v => {
+                const d = new Date(v * 1000);
+                if (range === 'live' || range === '1h') {
+                    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+                return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+            });
         };
 
         const opts = {

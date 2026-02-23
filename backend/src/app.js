@@ -35,9 +35,12 @@ const frontendPath = path.join(__dirname, '../../frontend/dist');
 if (fs.existsSync(frontendPath)) {
     app.use(express.static(frontendPath));
 
-    // Fallback for SPA
-    // Fallback for SPA (Express 5 regex for "match all")
-    app.get(/^(.*)$/, (req, res) => {
+    // SPA fallback — only for non-API, non-file requests
+    app.get(/^(.*)$/, (req, res, next) => {
+        // Skip API routes and file requests (assets with extensions)
+        if (req.path.startsWith('/api') || req.path.includes('.')) {
+            return next();
+        }
         res.sendFile(path.join(frontendPath, 'index.html'));
     });
 } else {

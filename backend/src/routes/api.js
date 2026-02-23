@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router();
 const dataController = require('../controllers/dataController');
 
-// More specific routes FIRST
-router.get('/data/stream', dataController.streamData);
-router.get('/data/stats', dataController.getStats);
-
-// General data routes
-router.get('/data', dataController.getData);
-router.post('/data', dataController.saveData);
+// Define routes with absolute clarity
+router.get('/data/stream', (req, res, next) => dataController.streamData(req, res, next));
+router.get('/data/stats', (req, res, next) => dataController.getStats(req, res, next));
+router.get('/data', (req, res, next) => dataController.getData(req, res, next));
+router.post('/data', (req, res, next) => dataController.saveData(req, res, next));
 
 module.exports = router;
+
 

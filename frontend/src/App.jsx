@@ -278,16 +278,22 @@ function App() {
 
     const connected = useSSE(STREAM_URL, handleSSE);
 
-    // Fetch data on range change
+    // Fetch data and manage polling
     useEffect(() => {
         fetchData(range);
 
-        // For non-live ranges, poll every 60s
-        if (range !== 'live') {
-            const interval = setInterval(() => fetchData(range), 60000);
-            return () => clearInterval(interval);
-        }
-    }, [range, fetchData]);
+        // Polling logic
+        const interval = setInterval(() => {
+            // If in live mode but SSE is offline, append new points via polling
+            if (range === 'live' && !connected) {
+                fetchData('live');
+            } else if (range !== 'live') {
+                fetchData(range);
+            }
+        }, range === 'live' ? 5000 : 60000);
+
+        return () => clearInterval(interval);
+    }, [range, fetchData, connected]);
 
     const timeRanges = useMemo(() => [
         { k: 'live', l: 'LIVE', icon: '⚡' },

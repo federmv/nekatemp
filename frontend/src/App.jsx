@@ -204,8 +204,8 @@ function App() {
     const parseTs = useCallback((ts) => {
         if (!ts) return Math.floor(Date.now() / 1000);
         try {
-            // Handle both SQL strings and numeric timestamps
-            const val = typeof ts === 'string' ? new Date(ts.replace(' ', 'T')).getTime() : ts;
+            // Handle both SQL strings and numeric timestamps. Force UTC parser by appending 'Z'
+            const val = typeof ts === 'string' ? new Date(ts.replace(' ', 'T') + 'Z').getTime() : ts;
             return Math.floor(val / 1000);
         } catch (e) {
             return Math.floor(Date.now() / 1000);

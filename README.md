@@ -16,8 +16,9 @@ cd frontend
 npm install
 npm run build
 
-# 3. Reiniciar Servidor (Backend)
-pm2 restart server
+# 3. Reiniciar Sistema Dual (Web Server + Ingestor MQTT)
+pm2 start ecosystem.config.js
+pm2 restart all
 ```
 
 ## 🔒 Cómo activar HTTPS (Doble Candado) y PWA Android

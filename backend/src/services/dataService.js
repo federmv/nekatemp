@@ -16,13 +16,11 @@ class DataService {
             );
 
             latestReading = {
+                id: this.lastPolledId ? this.lastPolledId + 1 : 1, // Fallback if no polling yet
                 temperature,
                 humidity: humidity || 0,
                 timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19)
             };
-
-            // Broadcast to all SSE clients instantly
-            this.broadcastSSE(latestReading);
 
             logger.info(`Measurement saved: T=${temperature}°C`);
             return latestReading;
@@ -158,6 +156,45 @@ class DataService {
         } catch (error) {
             logger.error('Error fetching stats:', error);
             throw new DatabaseError('Failed to fetch stats');
+        }
+    }
+
+    // 1. Retention Policy
+    async cleanOldData(days = 30) {
+        try {
+            const db = await getDB();
+            const result = await db.run(`DELETE FROM measurements WHERE timestamp < datetime('now', '-${days} days')`);
+            logger.info(`Retention Policy: Cleaned measurements older than ${days} days.`);
+            return result.changes;
+        } catch (error) {
+            logger.error('Error cleaning old data:', error);
+        }
+    }
+
+    // 2. Process Decoupling: Web Server polls for new SSEs instead of direct pushing
+    lastPolledId = 0;
+
+    async pollLatestForSSE() {
+        if (sseClients.size === 0) return; // Prevent DB load if no viewers
+
+        try {
+            const db = await getDB();
+            const latest = await db.get('SELECT id, temperature, humidity, timestamp FROM measurements ORDER BY id DESC LIMIT 1');
+
+            if (latest && latest.id > this.lastPolledId) {
+                // Ignore the very first poll to prevent dumping historical data as "new" event
+                if (this.lastPolledId !== 0) {
+                    this.broadcastSSE({
+                        temperature: latest.temperature,
+                        humidity: latest.humidity,
+                        timestamp: latest.timestamp
+                    });
+                }
+                this.lastPolledId = latest.id;
+                latestReading = latest; // Keep in sync for immediately connecting clients
+            }
+        } catch (e) {
+            // fail silently on polling error
         }
     }
 }

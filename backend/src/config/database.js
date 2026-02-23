@@ -20,6 +20,12 @@ async function connectDB() {
             driver: sqlite3.Database
         });
 
+        // Performance: WAL mode for concurrent reads + bigger cache
+        await db.exec('PRAGMA journal_mode = WAL');
+        await db.exec('PRAGMA synchronous = NORMAL');
+        await db.exec('PRAGMA cache_size = -8000'); // 8MB cache
+        await db.exec('PRAGMA mmap_size = 268435456'); // 256MB mmap
+
         await db.exec(`
             CREATE TABLE IF NOT EXISTS measurements (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,7 +35,13 @@ async function connectDB() {
             )
         `);
 
-        logger.info('SQLite database ready and table initialized.');
+        // Index on timestamp for fast range queries
+        await db.exec(`
+            CREATE INDEX IF NOT EXISTS idx_measurements_timestamp
+            ON measurements(timestamp)
+        `);
+
+        logger.info('SQLite database ready with WAL mode and indexes.');
         return db;
     } catch (error) {
         logger.error('Failed to connect to database', error);

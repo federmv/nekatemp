@@ -12,8 +12,8 @@ export default defineConfig({
                 name: 'Neka Dashboard',
                 short_name: 'Neka',
                 description: 'Monitor IoT',
-                theme_color: '#0f172a',
-                background_color: '#0f172a',
+                theme_color: '#060608',
+                background_color: '#060608',
                 display: 'standalone',
                 scope: '/',
                 start_url: '/',
@@ -32,7 +32,6 @@ export default defineConfig({
                 ]
             },
             workbox: {
-                // Forzar que el Service Worker controle la página inmediatamente
                 skipWaiting: true,
                 clientsClaim: true
             }
@@ -43,6 +42,15 @@ export default defineConfig({
             '/api': {
                 target: 'http://localhost:3001',
                 changeOrigin: true,
+                // Required for SSE: don't buffer the response
+                configure: (proxy) => {
+                    proxy.on('proxyRes', (proxyRes) => {
+                        if (proxyRes.headers['content-type'] === 'text/event-stream') {
+                            proxyRes.headers['cache-control'] = 'no-cache';
+                            proxyRes.headers['x-accel-buffering'] = 'no';
+                        }
+                    });
+                }
             }
         }
     }

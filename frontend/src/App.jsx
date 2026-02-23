@@ -194,10 +194,16 @@ function App() {
     const liveBufferRef = useRef([]);
     const maxLivePoints = 60;
 
-    // Parse timestamp string to unix seconds
+    // Parse timestamp string to unix seconds (robustly)
     const parseTs = useCallback((ts) => {
-        if (!ts) return Date.now() / 1000;
-        return new Date(ts.replace(' ', 'T') + 'Z').getTime() / 1000;
+        if (!ts) return Math.floor(Date.now() / 1000);
+        try {
+            // Handle both SQL strings and numeric timestamps
+            const val = typeof ts === 'string' ? new Date(ts.replace(' ', 'T')).getTime() : ts;
+            return Math.floor(val / 1000);
+        } catch (e) {
+            return Math.floor(Date.now() / 1000);
+        }
     }, []);
 
     // Fetch historical data
@@ -208,28 +214,37 @@ function App() {
                 fetch(`${STATS_URL}?range=${r === 'live' ? '' : r}`)
             ]);
 
-            const data = await dataRes.json();
+            const rawData = await dataRes.json();
             const statsData = await statsRes.json();
 
-            const ts = data.map(d => parseTs(d.timestamp));
-            const temps = data.map(d => d.temperature);
+            // Transform and sort data for uPlot
+            const processedData = rawData
+                .map(d => ({
+                    ts: parseTs(d.timestamp),
+                    val: parseFloat(d.temperature)
+                }))
+                .filter(d => !isNaN(d.ts) && !isNaN(d.val))
+                .sort((a, b) => a.ts - b.ts);
+
+            const ts = processedData.map(d => d.ts);
+            const temps = processedData.map(d => d.val);
 
             setChartData({ timestamps: ts, temperatures: temps });
             setStats(statsData);
 
             if (r === 'live') {
-                liveBufferRef.current = data.map(d => ({
-                    timestamp: parseTs(d.timestamp),
-                    temperature: d.temperature
+                liveBufferRef.current = processedData.map(d => ({
+                    timestamp: d.ts,
+                    temperature: d.val
                 }));
-                if (data.length > 0) {
-                    setLatestTemp(data[data.length - 1].temperature);
+                if (processedData.length > 0) {
+                    setLatestTemp(processedData[processedData.length - 1].val);
                 }
             }
         } catch (err) {
             console.error('Fetch error:', err);
         }
-    }, [parseTs]);
+    }, [parseTs, range]);
 
     // SSE handler — only active when range is 'live'
     const handleSSE = useCallback((data) => {

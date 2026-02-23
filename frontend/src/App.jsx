@@ -73,9 +73,9 @@ function TempChart({ timestamps, temperatures, range }) {
             return vals.map(v => {
                 const d = new Date(v * 1000);
                 if (range === 'live' || range === '1h') {
-                    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'America/Bogota' });
                 }
-                return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+                return d.toLocaleDateString([], { month: 'short', day: 'numeric', timeZone: 'America/Bogota' });
             });
         };
 

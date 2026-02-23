@@ -46,6 +46,7 @@ class DataController {
 
         // Send initial heartbeat
         res.write(':heartbeat\n\n');
+        if (typeof res.flush === 'function') res.flush();
 
         dataService.addSSEClient(res);
 
@@ -53,6 +54,7 @@ class DataController {
         const keepAlive = setInterval(() => {
             try {
                 res.write(':ping\n\n');
+                if (typeof res.flush === 'function') res.flush();
             } catch (e) {
                 clearInterval(keepAlive);
             }

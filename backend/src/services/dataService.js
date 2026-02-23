@@ -38,6 +38,7 @@ class DataService {
         // Send latest immediately so client doesn't start empty
         if (latestReading) {
             res.write(`data: ${JSON.stringify(latestReading)}\n\n`);
+            if (typeof res.flush === 'function') res.flush(); // Added flush for the initial send
         }
         res.on('close', () => {
             sseClients.delete(res);
@@ -51,6 +52,7 @@ class DataService {
         for (const client of sseClients) {
             try {
                 client.write(payload);
+                if (typeof client.flush === 'function') client.flush();
             } catch (e) {
                 sseClients.delete(client);
             }

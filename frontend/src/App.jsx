@@ -78,8 +78,8 @@ function TempChart({ timestamps, temperatures, range }) {
         };
 
         const opts = {
-            width: rect.width,
-            height: rect.height,
+            width: rect.width > 0 ? rect.width : 400,
+            height: rect.height > 0 ? rect.height : 300,
             cursor: {
                 drag: { x: false, y: false },
                 points: {
@@ -130,8 +130,12 @@ function TempChart({ timestamps, temperatures, range }) {
                     width: 2,
                     fill: (u, seriesIdx) => {
                         const ctx = u.ctx;
-                        const yPos0 = u.valToPos(u.scales.y.min, 'y', true);
-                        const yPos1 = u.valToPos(u.scales.y.max, 'y', true);
+                        const min = u.scales.y.min;
+                        const max = u.scales.y.max;
+                        if (min == null || max == null) return 'rgba(255,204,0,0.1)';
+                        const yPos0 = u.valToPos(min, 'y', true);
+                        const yPos1 = u.valToPos(max, 'y', true);
+                        if (isNaN(yPos0) || isNaN(yPos1) || !isFinite(yPos0) || !isFinite(yPos1)) return 'rgba(255,204,0,0.1)';
                         const grad = ctx.createLinearGradient(0, yPos1, 0, yPos0);
                         grad.addColorStop(0, 'rgba(255,204,0,0.15)');
                         grad.addColorStop(1, 'rgba(255,204,0,0)');
@@ -166,8 +170,8 @@ function TempChart({ timestamps, temperatures, range }) {
             for (const entry of entries) {
                 if (plotRef.current) {
                     plotRef.current.setSize({
-                        width: entry.contentRect.width,
-                        height: entry.contentRect.height
+                        width: entry.contentRect.width > 0 ? entry.contentRect.width : 400,
+                        height: entry.contentRect.height > 0 ? entry.contentRect.height : 300
                     });
                 }
             }
@@ -218,13 +222,26 @@ function App() {
             const statsData = await statsRes.json();
 
             // Transform and sort data for uPlot
-            const processedData = rawData
+            const rawProcessed = rawData
                 .map(d => ({
                     ts: parseTs(d.timestamp),
                     val: parseFloat(d.temperature)
                 }))
                 .filter(d => !isNaN(d.ts) && !isNaN(d.val))
                 .sort((a, b) => a.ts - b.ts);
+
+            // Ensure strictly monotonic timestamps for uPlot
+            const processedData = [];
+            for (let i = 0; i < rawProcessed.length; i++) {
+                const item = rawProcessed[i];
+                if (processedData.length > 0) {
+                    const last = processedData[processedData.length - 1];
+                    if (item.ts <= last.ts) {
+                        item.ts = last.ts + 1;
+                    }
+                }
+                processedData.push(item);
+            }
 
             const ts = processedData.map(d => d.ts);
             const temps = processedData.map(d => d.val);
@@ -255,12 +272,22 @@ function App() {
 
         setLatestTemp(temp);
 
-        liveBufferRef.current.push({ timestamp: ts, temperature: temp });
-        if (liveBufferRef.current.length > maxLivePoints) {
-            liveBufferRef.current = liveBufferRef.current.slice(-maxLivePoints);
+        const buf = [...liveBufferRef.current];
+        let newTs = ts;
+        if (buf.length > 0) {
+            const lastTs = buf[buf.length - 1].timestamp;
+            if (newTs <= lastTs) {
+                newTs = lastTs + 1; // Strict monotonic
+            }
         }
 
-        const buf = liveBufferRef.current;
+        buf.push({ timestamp: newTs, temperature: temp });
+        if (buf.length > maxLivePoints) {
+            buf.splice(0, buf.length - maxLivePoints);
+        }
+
+        liveBufferRef.current = buf;
+
         setChartData({
             timestamps: buf.map(d => d.timestamp),
             temperatures: buf.map(d => d.temperature)

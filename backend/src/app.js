@@ -26,25 +26,22 @@ app.use((req, res, next) => {
 });
 
 // API Routes — MUST be before static files
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api', apiRoutes);
 
 // Serve Static Frontend
 const frontendPath = path.join(__dirname, '../../frontend/dist');
 
 if (fs.existsSync(frontendPath)) {
-    // Serve static assets (JS, CSS, images, etc.)
+    // Serve static assets
     app.use(express.static(frontendPath));
 
-    // SPA fallback — only for navigation requests (not API, not files)
+    // SPA fallback
     app.use((req, res, next) => {
-        // Only handle GET requests that accept HTML
         if (req.method !== 'GET') return next();
         if (req.path.startsWith('/api')) return next();
-
-        // If the path has a file extension, it's a static asset that wasn't found
         if (path.extname(req.path)) return next();
 
-        // Serve index.html for SPA routes
         res.sendFile(path.join(frontendPath, 'index.html'));
     });
 } else {

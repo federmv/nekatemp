@@ -40,9 +40,9 @@ class MqttService {
                 try {
                     const data = JSON.parse(payload);
                     
-                    // Prioritize t_agua/t_ambiente from ESP32 code
-                    const waterVal = data.t_agua !== undefined ? data.t_agua : data.water;
-                    const ambientVal = data.t_ambiente !== undefined ? data.t_ambiente : data.ambient;
+                    // Prioritize temp_water/ambTemp from ESP32 code, with fallbacks for legacy variables
+                    const waterVal = data.temp_water !== undefined ? data.temp_water : (data.t_agua !== undefined ? data.t_agua : data.water);
+                    const ambientVal = data.ambTemp !== undefined ? data.ambTemp : (data.t_ambiente !== undefined ? data.t_ambiente : data.ambient);
 
                     if (waterVal !== undefined && ambientVal !== undefined) {
                         await dataService.saveMeasurement(

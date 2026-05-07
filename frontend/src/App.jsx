@@ -10,21 +10,22 @@ function App() {
   const [ambientTemp, setAmbientTemp] = useState(null);
   const [connected, setConnected] = useState(false);
   const [lastUpdated, setLastUpdated] = useState('');
+  const [range, setRange] = useState('live');
 
   useEffect(() => {
-    // 1. Fetch initial historical data
     const fetchHistory = async () => {
       try {
-        const res = await fetch(`${SERVER_URL}/api/data?limit=50`);
+        const res = await fetch(`${SERVER_URL}/api/data?range=${range}`);
         if (res.ok) {
           const json = await res.json();
-          if (Array.isArray(json) && json.length > 0) {
-            setData(json); // The service already returns it in correct order or reverse? 
-            // In dataService.js: return data.reverse() for 'live'.
-            const latest = json[json.length - 1];
-            setCurrentTemp(latest.temp_water || latest.temperature || null);
-            setAmbientTemp(latest.temp_ambient || latest.humidity || null);
-            setLastUpdated(new Date(latest.timestamp).toLocaleTimeString());
+          if (Array.isArray(json)) {
+            setData(json);
+            if (json.length > 0) {
+              const latest = json[json.length - 1];
+              setCurrentTemp(latest.temp_water || latest.temperature || null);
+              setAmbientTemp(latest.temp_ambient || latest.humidity || null);
+              setLastUpdated(new Date(latest.timestamp).toLocaleTimeString());
+            }
           }
         }
       } catch (err) {
@@ -33,44 +34,32 @@ function App() {
     };
     fetchHistory();
 
-    // 2. Connect to Server-Sent Events (SSE) for real-time updates
-    const eventSource = new EventSource(`${SERVER_URL}/api/data/stream`);
-
-    eventSource.onopen = () => {
-      setConnected(true);
-    };
-
-    eventSource.onmessage = (event) => {
-      try {
-        const newPoint = JSON.parse(event.data);
-        if (newPoint) {
-          const tWater = newPoint.temp_water || newPoint.temperature;
-          const tAmb = newPoint.temp_ambient || newPoint.humidity;
-          
-          if (tWater !== undefined) setCurrentTemp(tWater);
-          if (tAmb !== undefined) setAmbientTemp(tAmb);
-          
-          setLastUpdated(new Date(newPoint.timestamp).toLocaleTimeString());
-
-          setData(prev => {
-            const next = [...prev, newPoint];
-            if (next.length > 50) next.shift();
-            return next;
-          });
-        }
-      } catch (err) {
-        console.error("Error parsing SSE data:", err);
-      }
-    };
-
-    eventSource.onerror = () => {
-      setConnected(false);
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, []);
+    if (range === 'live') {
+      const eventSource = new EventSource(`${SERVER_URL}/api/data/stream`);
+      eventSource.onopen = () => setConnected(true);
+      eventSource.onmessage = (event) => {
+        try {
+          const newPoint = JSON.parse(event.data);
+          if (newPoint) {
+            const tWater = newPoint.temp_water || newPoint.temperature;
+            const tAmb = newPoint.temp_ambient || newPoint.humidity;
+            if (tWater !== undefined) setCurrentTemp(tWater);
+            if (tAmb !== undefined) setAmbientTemp(tAmb);
+            setLastUpdated(new Date(newPoint.timestamp).toLocaleTimeString());
+            setData(prev => {
+              const next = [...prev, newPoint];
+              if (next.length > 50) next.shift();
+              return next;
+            });
+          }
+        } catch (err) { console.error(err); }
+      };
+      eventSource.onerror = () => setConnected(false);
+      return () => eventSource.close();
+    } else {
+      setConnected(true); // Treat as connected for historical view
+    }
+  }, [range]);
 
   return (
     <div className="dashboard-root">
@@ -85,9 +74,23 @@ function App() {
       </div>
 
       <div className="glass-card">
-        <div className={`status-badge ${!connected ? 'disconnected' : ''}`}>
-          <div className="pulse"></div>
-          {connected ? 'Sistema Conectado' : 'Reconectando con Servidor...'}
+        <div className="card-header">
+          <div className={`status-badge ${!connected ? 'disconnected' : ''}`}>
+            <div className="pulse"></div>
+            {connected ? (range === 'live' ? 'En Vivo' : `Histórico: ${range}`) : 'Desconectado'}
+          </div>
+
+          <div className="range-selector">
+            {['live', '1h', '24h', '7d', '15d'].map(r => (
+              <button 
+                key={r} 
+                onClick={() => setRange(r)}
+                className={range === r ? 'active' : ''}
+              >
+                {r.toUpperCase()}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="main-stats">

@@ -35,6 +35,19 @@ async function connectDB() {
             )
         `);
 
+        // Check for old columns and migrate if necessary
+        try {
+            const tableInfo = await db.all("PRAGMA table_info(measurements)");
+            const hasTemperature = tableInfo.some(col => col.name === 'temperature');
+            if (hasTemperature) {
+                await db.exec('ALTER TABLE measurements RENAME COLUMN temperature TO temp_water');
+                await db.exec('ALTER TABLE measurements RENAME COLUMN humidity TO temp_ambient');
+                logger.info('Migrated database columns to temp_water and temp_ambient');
+            }
+        } catch (err) {
+            logger.warn('Could not run database migration: ' + err.message);
+        }
+
         // Index on timestamp for fast range queries
         await db.exec(`
             CREATE INDEX IF NOT EXISTS idx_measurements_timestamp

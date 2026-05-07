@@ -7,22 +7,22 @@ let latestReading = null;
 const sseClients = new Set();
 
 class DataService {
-    async saveMeasurement(temperature, humidity) {
+    async saveMeasurement(temp_water, temp_ambient) {
         try {
             const db = await getDB();
             await db.run(
-                'INSERT INTO measurements (temperature, humidity) VALUES (?, ?)',
-                [temperature, humidity || 0]
+                'INSERT INTO measurements (temp_water, temp_ambient) VALUES (?, ?)',
+                [temp_water, temp_ambient]
             );
 
             latestReading = {
                 id: this.lastPolledId ? this.lastPolledId + 1 : 1, // Fallback if no polling yet
-                temperature,
-                humidity: humidity || 0,
+                temp_water,
+                temp_ambient,
                 timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19)
             };
 
-            logger.info(`Measurement saved: T=${temperature}°C`);
+            logger.info(`Measurement saved: Water=${temp_water}°C, Ambient=${temp_ambient}°C`);
             return latestReading;
         } catch (error) {
             logger.error('Error saving measurement:', error);
@@ -64,7 +64,7 @@ class DataService {
             if (!range || range === 'live') {
                 // Live: last 50 readings, no downsampling needed
                 const data = await db.all(
-                    'SELECT temperature, humidity, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 50'
+                    'SELECT temp_water, temp_ambient, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 50'
                 );
                 return data.reverse();
             }
@@ -81,7 +81,7 @@ class DataService {
             if (!cfg) {
                 // Unknown range, fallback to last 50
                 const data = await db.all(
-                    'SELECT temperature, humidity, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 50'
+                    'SELECT temp_water, temp_ambient, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 50'
                 );
                 return data.reverse();
             }
@@ -89,7 +89,7 @@ class DataService {
             if (!cfg.bucket) {
                 // No downsampling: return all points in range
                 const data = await db.all(
-                    `SELECT temperature, humidity, timestamp FROM measurements
+                    `SELECT temp_water, temp_ambient, timestamp FROM measurements
                      WHERE timestamp >= datetime('now', '${cfg.interval}')
                      ORDER BY timestamp ASC`
                 );
@@ -99,8 +99,8 @@ class DataService {
             // Downsampled query: group by time buckets
             const data = await db.all(
                 `SELECT 
-                    ROUND(AVG(temperature), 2) as temperature,
-                    ROUND(AVG(humidity), 2) as humidity,
+                    ROUND(AVG(temp_water), 2) as temp_water,
+                    ROUND(AVG(temp_ambient), 2) as temp_ambient,
                     MIN(timestamp) as timestamp
                  FROM measurements
                  WHERE timestamp >= datetime('now', '${cfg.interval}')
@@ -134,20 +134,20 @@ class DataService {
                 // Live: stats from last 50 readings
                 const stats = await db.get(
                     `SELECT 
-                        ROUND(MAX(temperature), 2) as peak,
-                        ROUND(MIN(temperature), 2) as low,
-                        ROUND(AVG(temperature), 2) as avg,
+                        ROUND(MAX(temp_water), 2) as peak,
+                        ROUND(MIN(temp_water), 2) as low,
+                        ROUND(AVG(temp_water), 2) as avg,
                         COUNT(*) as count
-                     FROM (SELECT temperature FROM measurements ORDER BY timestamp DESC LIMIT 50)`
+                     FROM (SELECT temp_water FROM measurements ORDER BY timestamp DESC LIMIT 50)`
                 );
                 return stats || { peak: 0, low: 0, avg: 0, count: 0 };
             }
 
             const stats = await db.get(
                 `SELECT 
-                    ROUND(MAX(temperature), 2) as peak,
-                    ROUND(MIN(temperature), 2) as low,
-                    ROUND(AVG(temperature), 2) as avg,
+                    ROUND(MAX(temp_water), 2) as peak,
+                    ROUND(MIN(temp_water), 2) as low,
+                    ROUND(AVG(temp_water), 2) as avg,
                     COUNT(*) as count
                  FROM measurements ${whereClause}`
             );
@@ -179,14 +179,14 @@ class DataService {
 
         try {
             const db = await getDB();
-            const latest = await db.get('SELECT id, temperature, humidity, timestamp FROM measurements ORDER BY id DESC LIMIT 1');
+            const latest = await db.get('SELECT id, temp_water, temp_ambient, timestamp FROM measurements ORDER BY id DESC LIMIT 1');
 
             if (latest && latest.id > this.lastPolledId) {
                 // Ignore the very first poll to prevent dumping historical data as "new" event
                 if (this.lastPolledId !== 0) {
                     this.broadcastSSE({
-                        temperature: latest.temperature,
-                        humidity: latest.humidity,
+                        temp_water: latest.temp_water,
+                        temp_ambient: latest.temp_ambient,
                         timestamp: latest.timestamp
                     });
                 }

@@ -31,20 +31,40 @@ class MqttService {
 
         // Publish Handler
         this.aedes.on('publish', async (packet, client) => {
-            if (packet.topic === 'casa/esp32/datos') {
-                const msg = packet.payload.toString();
-                logger.info(`[MQTT] Data received: ${msg}`);
+            const topic = packet.topic;
+            const payload = packet.payload.toString();
 
-                // ESP32 sends only number (e.g., "25.5")
-                const temperature = parseFloat(msg);
+            if (topic === 'casa/esp32/datos') {
+                logger.info(`[MQTT] Data: ${payload}`);
 
-                if (!isNaN(temperature)) {
-                    try {
+                try {
+                    const data = JSON.parse(payload);
+                    
+                    // Prioritize t_agua/t_ambiente from ESP32 code
+                    const waterVal = data.t_agua !== undefined ? data.t_agua : data.water;
+                    const ambientVal = data.t_ambiente !== undefined ? data.t_ambiente : data.ambient;
+
+                    if (waterVal !== undefined && ambientVal !== undefined) {
+                        await dataService.saveMeasurement(
+                            parseFloat(waterVal),
+                            parseFloat(ambientVal)
+                        );
+                    } else {
+                        logger.warn(`[MQTT] Missing temperature keys in JSON: ${payload}`);
+                    }
+                } catch (e) {
+                    // Fallback for raw float if not JSON
+                    const temperature = parseFloat(payload);
+                    if (!isNaN(temperature)) {
                         await dataService.saveMeasurement(temperature, 0);
-                    } catch (error) {
-                        // Logged in service
+                    } else {
+                        logger.error(`[MQTT] Failed to parse payload: ${payload}`);
                     }
                 }
+            } else if (topic === 'casa/esp32/status') {
+                logger.info(`[MQTT] Device Status: ${payload}`);
+            } else if (topic === 'casa/esp32/alerts') {
+                logger.warn(`[MQTT] ALERT: ${payload}`);
             }
         });
     }

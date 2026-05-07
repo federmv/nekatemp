@@ -4,18 +4,20 @@ const { asyncHandler } = require('../middleware/errorHandler');
 
 class DataController {
     saveData = asyncHandler(async (req, res, next) => {
-        const { temperature, humidity } = req.body;
+        const { temp_water, temp_ambient } = req.body;
 
-        if (temperature === undefined) {
-            throw new ValidationError('Temperature is required');
+        if (temp_water === undefined) {
+            throw new ValidationError('temp_water is required');
         }
 
-        const numericTemp = parseFloat(temperature);
-        if (isNaN(numericTemp)) {
-            throw new ValidationError('Temperature must be a number');
+        const numericWater = parseFloat(temp_water);
+        const numericAmbient = parseFloat(temp_ambient || 0);
+
+        if (isNaN(numericWater)) {
+            throw new ValidationError('temp_water must be a number');
         }
 
-        await dataService.saveMeasurement(numericTemp, humidity);
+        await dataService.saveMeasurement(numericWater, numericAmbient);
 
         res.status(201).json({
             status: 'success',

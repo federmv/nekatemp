@@ -29,8 +29,8 @@ async function connectDB() {
         await db.exec(`
             CREATE TABLE IF NOT EXISTS measurements (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                temperature REAL,
-                humidity REAL,
+                temp_water REAL,
+                temp_ambient REAL,
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         `);

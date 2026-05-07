@@ -19,6 +19,8 @@ class DataService {
                 id: this.lastPolledId ? this.lastPolledId + 1 : 1, // Fallback if no polling yet
                 temp_water,
                 temp_ambient,
+                temperature: temp_water, // Compatibility
+                humidity: temp_ambient, // Compatibility
                 timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19)
             };
 
@@ -64,7 +66,7 @@ class DataService {
             if (!range || range === 'live') {
                 // Live: last 50 readings, no downsampling needed
                 const data = await db.all(
-                    'SELECT temp_water, temp_ambient, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 50'
+                    'SELECT temp_water, temp_ambient, temp_water as temperature, temp_ambient as humidity, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 50'
                 );
                 return data.reverse();
             }
@@ -89,7 +91,7 @@ class DataService {
             if (!cfg.bucket) {
                 // No downsampling: return all points in range
                 const data = await db.all(
-                    `SELECT temp_water, temp_ambient, timestamp FROM measurements
+                    `SELECT temp_water, temp_ambient, temp_water as temperature, temp_ambient as humidity, timestamp FROM measurements
                      WHERE timestamp >= datetime('now', '${cfg.interval}')
                      ORDER BY timestamp ASC`
                 );
@@ -101,6 +103,8 @@ class DataService {
                 `SELECT 
                     ROUND(AVG(temp_water), 2) as temp_water,
                     ROUND(AVG(temp_ambient), 2) as temp_ambient,
+                    ROUND(AVG(temp_water), 2) as temperature,
+                    ROUND(AVG(temp_ambient), 2) as humidity,
                     MIN(timestamp) as timestamp
                  FROM measurements
                  WHERE timestamp >= datetime('now', '${cfg.interval}')
@@ -187,6 +191,8 @@ class DataService {
                     this.broadcastSSE({
                         temp_water: latest.temp_water,
                         temp_ambient: latest.temp_ambient,
+                        temperature: latest.temp_water,
+                        humidity: latest.temp_ambient,
                         timestamp: latest.timestamp
                     });
                 }

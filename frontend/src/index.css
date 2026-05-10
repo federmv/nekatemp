@@ -1,77 +1,235 @@
 :root {
-  font-family: 'Inter', sans-serif;
-  background-color: #f4f7f6;
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  background: #0f172a;
+}
+
+body {
   margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(at 0% 0%, rgba(30, 64, 175, 0.4) 0, transparent 50%),
+              radial-gradient(at 50% 0%, rgba(79, 70, 229, 0.3) 0, transparent 50%),
+              radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.4) 0, transparent 50%);
+  color: #f8fafc;
 }
 
-.iot-container {
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
+#root {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem;
 }
 
-.iot-stack {
+.app-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  width: 100%;
-  max-width: 750px;
+  gap: 1.5rem;
 }
 
-.iot-card {
-  background: white;
-  width: 100%;
-  max-width: 700px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  padding: 20px;
-  border: 1px solid #e0e6e6;
-}
-
-.iot-header h2 {
-  font-size: 18px;
-  color: #333;
-  margin: 0 0 20px 0;
-  font-weight: 500;
-}
-
-.iot-range-bar {
+/* Header */
+.header-container {
   display: flex;
-  background: #f0f3f3;
-  border-radius: 8px;
-  padding: 4px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
 }
 
-.iot-range-bar button {
+.title-icon {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  padding: 0.8rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 242, 254, 0.3);
+}
+
+.title-text h1 {
+  font-size: 1.5rem;
+  margin: 0;
+  background: linear-gradient(to right, #fff, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.title-text p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.connection-status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.connection-status.on { color: #22c55e; border-color: rgba(34, 197, 94, 0.3); }
+.connection-status.off { color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
+
+/* Glass Cards */
+.glass-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Stats */
+.temp-hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.current-temp {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.current-temp .value {
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(to bottom, #fff 30%, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.current-temp .unit {
+  font-size: 1.5rem;
+  color: #00f2fe;
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.last-update {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  background: rgba(0,0,0,0.2);
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+}
+
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.max .stat-icon { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+.min .stat-icon { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.avg .stat-icon { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
+
+.stat-info { text-align: center; }
+.stat-info .label { display: block; font-size: 0.6rem; color: #64748b; font-weight: 700; }
+.stat-info .val { font-size: 1.1rem; font-weight: 700; }
+
+/* Range Selector */
+.range-selector {
+  display: flex;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 0.4rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.range-btn {
   flex: 1;
   background: transparent;
   border: none;
-  padding: 10px;
-  font-size: 14px;
-  color: #666;
+  color: #64748b;
+  padding: 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
   cursor: pointer;
-  border-radius: 6px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
   transition: all 0.2s;
 }
 
-.iot-range-bar button.active {
-  background: #008784;
-  color: white;
+.range-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.iot-chart-wrapper {
-  position: relative;
-  padding-top: 10px;
+/* Chart */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.iot-timezone {
-  font-size: 11px;
-  color: #999;
-  position: absolute;
-  bottom: 35px;
-  left: 10px;
+.chart-header h3 { margin: 0; font-size: 1rem; color: #94a3b8; }
+
+.chart-container {
+  height: 240px;
+  width: 100%;
 }
 
-body { margin: 0; }
+.loader-mini {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.1);
+  border-top-color: #00f2fe;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.connection-error {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(239, 68, 68, 0.9);
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}

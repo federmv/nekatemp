@@ -64,67 +64,62 @@ class DataService {
             const db = await getDB();
 
             if (!range || range === 'live') {
-                // Live: last 50 readings, no downsampling needed
+                // Live: last 100 readings (increased from 50)
                 const data = await db.all(
-                    'SELECT temp_water, temp_ambient, temp_water as temperature, temp_ambient as humidity, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 50'
+                    'SELECT temp_water, temp_ambient, temp_water as temperature, temp_ambient as humidity, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 100'
                 );
                 return data.reverse();
             }
 
             // Map range to SQL interval and downsampling bucket
             const config = {
-                '1h': { interval: '-1 hour', bucket: null },       // ~120 points max, no downsampling
-                '24h': { interval: '-24 hours', bucket: 5 },          // Avg every 5 minutes → ~288 points
-                '7d': { interval: '-7 days', bucket: 30 },         // Avg every 30 min → ~336 points
-                '15d': { interval: '-15 days', bucket: 60 }          // Avg every 60 min → ~360 points
+                '1h': { interval: '-1 hour', bucket: null },       // Raw data for 1 hour
+                '24h': { interval: '-24 hours', bucket: 2 },        // Every 2 minutes
+                '7d': { interval: '-7 days', bucket: 15 },         // Every 15 minutes
+                '15d': { interval: '-15 days', bucket: 30 }         // Every 30 minutes
             };
 
             const cfg = config[range];
             if (!cfg) {
-                // Unknown range, fallback to last 50
                 const data = await db.all(
-                    'SELECT temp_water, temp_ambient, timestamp FROM measurements ORDER BY timestamp DESC LIMIT 50'
+                    'SELECT temp_water, temp_ambient, timestamp FROM measurements ORDER BY id DESC LIMIT 100'
                 );
                 return data.reverse();
             }
 
             if (!cfg.bucket) {
                 // No downsampling: return all points in range
-                const data = await db.all(
+                return await db.all(
                     `SELECT temp_water, temp_ambient, temp_water as temperature, temp_ambient as humidity, timestamp FROM measurements
                      WHERE timestamp >= datetime('now', '${cfg.interval}')
                      ORDER BY timestamp ASC`
                 );
-                return data;
             }
 
-            // Downsampled query: group by time buckets
-            const data = await db.all(
+            // Downsampled query: group by time buckets, but include MAX/MIN to avoid losing peaks
+            return await db.all(
                 `SELECT 
                     ROUND(AVG(temp_water), 2) as temp_water,
                     ROUND(AVG(temp_ambient), 2) as temp_ambient,
-                    ROUND(AVG(temp_water), 2) as temperature,
-                    ROUND(AVG(temp_ambient), 2) as humidity,
+                    ROUND(MAX(temp_water), 2) as max_temp_water,
+                    ROUND(MIN(temp_water), 2) as min_temp_water,
                     MIN(timestamp) as timestamp
                  FROM measurements
                  WHERE timestamp >= datetime('now', '${cfg.interval}')
                  GROUP BY strftime('%s', timestamp) / (${cfg.bucket} * 60)
                  ORDER BY timestamp ASC`
             );
-
-            return data;
         } catch (error) {
             logger.error('Error fetching measurements:', error);
             throw new DatabaseError('Failed to fetch measurements');
         }
     }
 
-    // Stats endpoint for derived values (peak, low, avg) computed on DB side
+    // Simplified Stats endpoint: The app will now handle most of this, 
+    // but we keep a basic version for quick metadata if needed.
     async getStats(range) {
         try {
             const db = await getDB();
-            let whereClause = '';
-
             const intervals = {
                 '1h': '-1 hour',
                 '24h': '-24 hours',
@@ -132,28 +127,16 @@ class DataService {
                 '15d': '-15 days'
             };
 
-            if (range && intervals[range]) {
-                whereClause = `WHERE timestamp >= datetime('now', '${intervals[range]}')`;
-            } else {
-                // Live: stats from last 50 readings
-                const stats = await db.get(
-                    `SELECT 
-                        ROUND(MAX(temp_water), 2) as peak,
-                        ROUND(MIN(temp_water), 2) as low,
-                        ROUND(AVG(temp_water), 2) as avg,
-                        COUNT(*) as count
-                     FROM (SELECT temp_water FROM measurements ORDER BY timestamp DESC LIMIT 50)`
-                );
-                return stats || { peak: 0, low: 0, avg: 0, count: 0 };
-            }
-
+            const interval = intervals[range] || '-1 hour';
+            
             const stats = await db.get(
                 `SELECT 
                     ROUND(MAX(temp_water), 2) as peak,
                     ROUND(MIN(temp_water), 2) as low,
                     ROUND(AVG(temp_water), 2) as avg,
                     COUNT(*) as count
-                 FROM measurements ${whereClause}`
+                 FROM measurements 
+                 WHERE timestamp >= datetime('now', '${interval}')`
             );
 
             return stats || { peak: 0, low: 0, avg: 0, count: 0 };
